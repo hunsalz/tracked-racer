@@ -1,0 +1,149 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-input/iron-input.html">
+
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="controller-app">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: block;
+        @apply --paper-font-common-base;
+      }
+
+      .container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        background-color: #455a64;
+      }
+
+      .control {
+        display: inline-flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100vh;
+        height: 100vw;
+        transform: translate(-50%, -50%) rotate(-90deg);
+      }
+
+      .value {
+        flex: 0 1 auto;
+        margin-top: 15vw;
+        margin-bottom: 15vw;
+        color: white;
+        font-size: 2em;
+        transform: rotate(90deg);
+      }
+
+      .spacer {
+        flex: 1 1 auto;
+        min-height: 20vw;
+      }
+
+      input[type=range] {
+        -webkit-appearance: none;
+        flex: 0 1 auto;
+        width: 100vh;
+      }
+
+      input[type=range]::-webkit-slider-runnable-track {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 8px;
+        border: none;
+        background: white;
+      }
+
+      input[type=range]::-moz-range-track {
+        width: 100%;
+        height: 8px;
+        border: none;
+        background: white;
+      }
+
+      input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 56px;
+        width: 56px;
+        border-radius: 50%;
+        margin-top: -24px;
+        border: 16px solid white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, .8);
+        background: #455a64;
+      }
+
+      input[type=range]::-moz-range-thumb {
+        height: 36px;
+        width: 36px;
+        border-radius: 50%;
+        margin-top: -24px;
+        border: 16px solid white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, .8);
+        background: #455a64;
+      }
+
+      input[type=range]:focus {
+        outline: none;
+      }
+
+      input[type=range]:-moz-focusring {
+        outline: none;
+      }
+
+      input[type=range]:focus::-webkit-slider-runnable-track {
+        background: #ccc;
+      }
+
+      input[type=range]:focus::-moz-range-track {
+        background: #ccc;
+      }
+    </style>
+    <div class="container">
+      <div class="control">
+        <div class="value">[[motorA]]</div>
+        <input type="range" value="{{motorA::input}}" min="-255" max="255" step="5"></input>
+        <div class="spacer"></div>
+        <input type="range" value="{{motorB::input}}" min="-255" max="255" step="5"></input>
+        <div class="value">[[motorB]]</div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class ControllerApp extends Polymer.Element {
+
+      static get is() {
+        return 'controller-app';
+      }
+
+      static get properties() {
+
+        return {
+          motorA: {
+            type: Number,
+            value: 0,
+            notify: true
+          },
+          motorB: {
+            type: Number,
+            value: 0,
+            notify: true
+          }
+        };
+      }
+    }
+
+    window.customElements.define(ControllerApp.is, ControllerApp);
+  </script>
+</dom-module>
