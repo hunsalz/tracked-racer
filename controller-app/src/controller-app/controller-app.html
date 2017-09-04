@@ -5,6 +5,8 @@
 <link rel="import" href="../../bower_components/paper-styles/color.html">
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
 
+<link rel="import" href="../../bower_components/web-socket/web-socket.html">
+
 <dom-module id="controller-app">
   <template strip-whitespace>
     <style>
@@ -109,15 +111,21 @@
         background: #ccc;
       }
     </style>
+
     <div class="container">
       <div class="control">
-        <div class="value">[[motorA]]</div>
-        <input type="range" value="{{motorA::input}}" min="-255" max="255" step="5"></input>
+        <div class="value">[[leftMotor]]</div>
+        <input type="range" value="{{leftMotor::input}}" min="-255" max="255" step="5"></input>
         <div class="spacer"></div>
-        <input type="range" value="{{motorB::input}}" min="-255" max="255" step="5"></input>
-        <div class="value">[[motorB]]</div>
+        <input type="range" value="{{rightMotor::input}}" min="-255" max="255" step="5"></input>
+        <div class="value">[[rightMotor]]</div>
       </div>
     </div>
+    <web-socket id="ws"
+                auto
+                url="[[url]]"
+                verbose>
+    <web-socket>
   </template>
 
   <script>
@@ -130,20 +138,29 @@
       static get properties() {
 
         return {
-          motorA: {
-            type: Number,
-            value: 0,
-            notify: true
+          url: {
+            type: String,
+            value: 'ws://127.0.0.1:8000'
           },
-          motorB: {
+          leftMotor: {
             type: Number,
             value: 0,
-            notify: true
+            notify: true,
+            observer: '_changed'
+          },
+          rightMotor: {
+            type: Number,
+            value: 0,
+            notify: true,
+            observer: '_changed'
           }
         };
       }
-    }
 
+      _changed() {
+        this.$.ws.send({leftMotor: this.leftMotor, rightMotor: this.rightMotor, mode: 'absolute'});
+      }
+    }
     window.customElements.define(ControllerApp.is, ControllerApp);
   </script>
 </dom-module>
