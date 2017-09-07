@@ -114,11 +114,11 @@
 
     <div class="container">
       <div class="control">
-        <div class="value">[[leftMotor]]</div>
-        <input type="range" value="{{leftMotor::input}}" min="-255" max="255" step="5"></input>
+        <div class="value">[[motorA]]</div>
+        <input type="range" value="{{motorA::input}}" min="-255" max="255" step="15"></input>
         <div class="spacer"></div>
-        <input type="range" value="{{rightMotor::input}}" min="-255" max="255" step="5"></input>
-        <div class="value">[[rightMotor]]</div>
+        <input type="range" value="{{motorB::input}}" min="-255" max="255" step="15"></input>
+        <div class="value">[[motorB]]</div>
       </div>
     </div>
     <web-socket id="ws"
@@ -143,13 +143,13 @@
             //value: 'ws://' + window.location.hostname + ':8000/racer'
             value: 'ws://' + window.location.hostname + ':80/racer'
           },
-          leftMotor: {
+          motorA: {
             type: Number,
             value: 0,
             notify: true,
             observer: '_changed'
           },
-          rightMotor: {
+          motorB: {
             type: Number,
             value: 0,
             notify: true,
@@ -159,7 +159,7 @@
       }
 
       _changed() {
-        this.$.ws.send({leftMotor: this.leftMotor, rightMotor: this.rightMotor, mode: 'absolute'});
+        this.$.ws.send({motorA: this.motorA, motorB: this.motorB, mode: 'absolute'});
       }
     }
     window.customElements.define(ControllerApp.is, ControllerApp);

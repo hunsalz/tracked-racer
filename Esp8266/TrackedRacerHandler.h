@@ -18,6 +18,5 @@ class TrackedRacerHandler : public WSHandler {
 
   private:
 
-    MotorShieldDriver *motorA;
-    MotorShieldDriver *motorB;
+    MotorShieldDriver *shield;
 };

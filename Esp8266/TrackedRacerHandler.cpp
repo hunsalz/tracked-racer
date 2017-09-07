@@ -2,18 +2,17 @@
 
 TrackedRacerHandler::TrackedRacerHandler(bool enabled) {
 
-  motorA = new MotorShieldDriver(enabled, MOTOR_A_SPEED, MOTOR_A_DIR);
-  motorA->setSpeed(0);
-  motorB = new MotorShieldDriver(enabled, MOTOR_B_SPEED, MOTOR_B_DIR);
-  motorB->setSpeed(0);
+  shield = new MotorShieldDriver(enabled, MOTOR_A_SPEED, MOTOR_A_DIR, MOTOR_B_SPEED, MOTOR_B_DIR);
+  shield->setSpeedA(0);
+  shield->setSpeedB(0);
 
-  Log.verbose(F("Setup for remote control done." CR));
+  Log.verbose(F("Ready to control motor shield ..." CR));
 };
 
 void TrackedRacerHandler::processMessage(AsyncWebSocket *ws, AsyncWebSocketClient *client, JsonObject &json) {
 
-  const char* speedA = json["leftMotor"];
-  const char* speedB = json["rightMotor"];
+  const char* speedA = json["motorA"];
+  const char* speedB = json["motorB"];
   const char* mode = json["mode"];
 /**
   Log.verbose(F("motor A : %s -%d" CR), speedA, atoi(speedA));
@@ -21,11 +20,11 @@ void TrackedRacerHandler::processMessage(AsyncWebSocket *ws, AsyncWebSocketClien
   Log.verbose(F("mode : %s" CR), mode);
 */
   if (strcmp("absolute", mode) == 0) {
-    motorA->setSpeed(atoi(speedA));
-    motorB->setSpeed(atoi(speedB));
+    shield->setSpeedA(atoi(speedA));
+    shield->setSpeedB(atoi(speedB));
   } else {
-    motorA->apply(atoi(speedA));
-    motorB->apply(atoi(speedB));
+    shield->applySpeedA(atoi(speedA));
+    shield->applySpeedB(atoi(speedB));
   }
 
   notify(ws, client, "message", true);
@@ -37,8 +36,8 @@ void TrackedRacerHandler::notify(AsyncWebSocket *ws, AsyncWebSocketClient *clien
   JsonObject& json = jsonBuffer.createObject();
   json["type"] = type;
   json["clientId"] = client->id();
-  json["speedA"] = motorA->getSpeed();
-  json["speedB"] = motorB->getSpeed();
+  json["motorA"] = shield->getSpeedA();
+  json["motorB"] = shield->getSpeedB();
 
   send(ws, client, &json, broadcast);
 }
