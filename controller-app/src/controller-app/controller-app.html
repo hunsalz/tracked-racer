@@ -140,7 +140,8 @@
         return {
           url: {
             type: String,
-            value: 'ws://127.0.0.1:8000'
+            //value: 'ws://' + window.location.hostname + ':8000/racer'
+            value: 'ws://' + window.location.hostname + ':80/racer'
           },
           leftMotor: {
             type: Number,
