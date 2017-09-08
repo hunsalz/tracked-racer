@@ -6,8 +6,6 @@
 
 #include "Service.h"
 
-#include "TrackedRacerHandler.h"
-
 class WebService : public Service {
 
   public:
@@ -22,22 +20,11 @@ class WebService : public Service {
 
     bool stop();
 
-    AsyncCallbackWebHandler& on(const char* uri, ArRequestHandlerFunction onRequest);
-    AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest);
-    AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArUploadHandlerFunction onUpload);
-    AsyncCallbackWebHandler& on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArUploadHandlerFunction onUpload, ArBodyHandlerFunction onBody);
-
-    bool remove(AsyncWebHandler* handler);
-
-    ArRequestHandlerFunction notFoundFunction();
+    AsyncWebServer* getWebServer();
 
   private:
 
 		AsyncWebServer webServer;
-
-    AsyncWebSocket webSocket;
-
-    TrackedRacerHandler racerHandler;
 
     bool _running = false;
 };

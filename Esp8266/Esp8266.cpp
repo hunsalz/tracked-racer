@@ -20,7 +20,17 @@ bool Esp8266::start() {
     fsService.start();
     webService.start();
 
-    espInfoHandler = &webService.on("/esp", HTTP_GET, getESPInfoFunction());
+    // add http resources
+    servicesInfoHandler = &webService.getWebServer()->on("/services", HTTP_GET, getServicesInfoFunction());
+    espInfoHandler = &webService.getWebServer()->on("/esp", HTTP_GET, getESPInfoFunction());
+    infoHandler = &webService.getWebServer()->on("/fs/info", HTTP_GET, fsService.getInfoFunction());
+    listHandler = &webService.getWebServer()->on("/fs/list", HTTP_GET, fsService.getListFunction());
+
+    // add ws resources
+    AsyncWebSocket* webSocket = new AsyncWebSocket("/racer");
+    TrackedRacerHandler racerHandler = new TrackedRacerHandler(true);
+    webSocket->onEvent(std::bind(&TrackedRacerHandler::onEvent, racerHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5, std::placeholders::_6));
+    &webService.getWebServer()->addHandler(webSocket);
 
     _running = true;
 
@@ -35,7 +45,6 @@ bool Esp8266::start() {
 bool Esp8266::stop() {
 
   if (isRunning()) {
-    webService.remove(espInfoHandler);
     webService.stop();
     fsService.stop();
     wiFiStaService.stop();
@@ -60,6 +69,20 @@ void Esp8266::run() {
       Log.verbose(F("WebServer is running." CR));
     }
   }
+}
+
+ArRequestHandlerFunction Esp8266::getServicesInfoFunction() {
+
+  return [](AsyncWebServerRequest *request) {
+    AsyncJsonResponse *response = new AsyncJsonResponse();
+    JsonObject& json = response->getRoot();
+    json[F("services")] = "http://" + request->host() + "/services";
+    json[F("esp")] = "http://" + request->host() + "/esp";
+
+
+    response->setLength();
+    request->send(response);
+  };
 }
 
 ArRequestHandlerFunction Esp8266::getESPInfoFunction() {

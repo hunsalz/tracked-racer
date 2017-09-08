@@ -19,6 +19,8 @@ class WiFiStaService : public Service {
 
     bool stop();
 
+    IPAddress getLocalIp();
+
   private:
 
 		ESP8266WiFiMulti wifiMulti;

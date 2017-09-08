@@ -13,10 +13,11 @@ extern "C" {
 
 #include "Service.h"
 #include "Configuration.h"
+#include "FSService.h"
+#include "TrackedRacerHandler.h"
+#include "WebService.h"
 #include "WiFiAPService.h"
 #include "WiFiStaService.h"
-#include "FSService.h"
-#include "WebService.h"
 
 class Esp8266 : public Service {
 
@@ -33,6 +34,8 @@ class Esp8266 : public Service {
 
 		void run();
 
+    ArRequestHandlerFunction getServicesInfoFunction();
+
     ArRequestHandlerFunction getESPInfoFunction();
 
 	private:
@@ -46,5 +49,8 @@ class Esp8266 : public Service {
 		unsigned long previousTime = millis();
 		unsigned int updateInterval = 5000;
 
+    AsyncCallbackWebHandler* servicesInfoHandler;
     AsyncCallbackWebHandler* espInfoHandler;
+    AsyncCallbackWebHandler* infoHandler;
+    AsyncCallbackWebHandler* listHandler;
 };
