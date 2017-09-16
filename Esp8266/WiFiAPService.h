@@ -9,6 +9,7 @@ extern "C" {
 }
 #endif
 
+#include "Configuration.h"
 #include "Service.h"
 
 class WiFiAPService : public Service {
@@ -25,21 +26,17 @@ class WiFiAPService : public Service {
 
     bool stop();
 
-    bool setupMDNS();
+    bool setupMDNS(const char* hostName, unsigned int port);
 
-    /**
-     * returns number of connected stations
-     */
-    uint8_t getStationNumber();
+    ESP8266WiFiClass *getWiFi();
 
     /**
      * returns current configuration of the ESP8266 WiFi soft-AP
      */
+    // TODO needed?
     softap_config* getConfig();
 
   private:
 
     WiFiEventHandler connectedEventHandler, disconnectedEventHandler;
-
-    bool _running = false;
 };

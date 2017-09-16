@@ -1,13 +1,14 @@
 #include "Esp8266.h"
 
-Esp8266::Esp8266() {}
+Esp8266::Esp8266() : webService(HTTP_PORT, ROOT_CTX) {
+}
 
 Esp8266::~Esp8266() {
   stop();
 }
 
 bool Esp8266::isRunning() {
-  return _running;
+  return running;
 }
 
 bool Esp8266::start() {
@@ -16,23 +17,34 @@ bool Esp8266::start() {
     Log.verbose(F("Setup ESP8266 ..." CR));
 
     wiFiAPService.start();
+    // try to enable multicast DNS if HOST_NAME is given
+    wiFiAPService.setupMDNS(HOST_NAME, 80);
+
+    wiFiStaService.getWiFiMulti()->addAP(WIFI_SSID_1, WIFI_PASSWD_1);
+    wiFiStaService.getWiFiMulti()->addAP(WIFI_SSID_2, WIFI_PASSWD_2);
     wiFiStaService.start();
+    
     fsService.start();
     webService.start();
 
     // add http resources
-    servicesInfoHandler = &webService.getWebServer()->on("/services", HTTP_GET, getServicesInfoFunction());
-    espInfoHandler = &webService.getWebServer()->on("/esp", HTTP_GET, getESPInfoFunction());
-    infoHandler = &webService.getWebServer()->on("/fs/info", HTTP_GET, fsService.getInfoFunction());
-    listHandler = &webService.getWebServer()->on("/fs/list", HTTP_GET, fsService.getListFunction());
+    webService.on("/esp", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, getESPDetails());
+    });
+    webService.on("/wifi", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, wiFiStaService.getWiFiDetails());
+    });
+    webService.on("/fs/details", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, fsService.getStorageDetails());
+    });
+    webService.on("/fs/listing", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, fsService.getFileListing());
+    });
 
-    // add ws resources
-    AsyncWebSocket* webSocket = new AsyncWebSocket("/racer");
-    TrackedRacerHandler racerHandler = new TrackedRacerHandler(true);
-    webSocket->onEvent(std::bind(&TrackedRacerHandler::onEvent, racerHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5, std::placeholders::_6));
-    &webService.getWebServer()->addHandler(webSocket);
+    // add ws resource
+    webService.addWebSocket("/racer", new TrackedRacerHandler());
 
-    _running = true;
+    running = true;
 
     Log.verbose(F("=========================" CR));
     Log.verbose(F("Setup finished. Have fun." CR));
@@ -50,7 +62,7 @@ bool Esp8266::stop() {
     wiFiStaService.stop();
     wiFiAPService.stop();
 
-    _running = false;
+    running = false;
   }
 
   return isRunning();
@@ -62,7 +74,7 @@ void Esp8266::run() {
     previousTime = millis();
 
     if (wiFiAPService.isRunning()) {
-      Log.verbose(F("%d station(s) connected to soft-AP." CR), wiFiAPService.getStationNumber());
+      Log.verbose(F("%d station(s) connected to soft-AP." CR), wiFiAPService.getWiFi()->softAPgetStationNum());
     }
 
     if (webService.isRunning()) {
@@ -71,49 +83,32 @@ void Esp8266::run() {
   }
 }
 
-ArRequestHandlerFunction Esp8266::getServicesInfoFunction() {
+JsonObject& Esp8266::getESPDetails() {
 
-  return [](AsyncWebServerRequest *request) {
-    AsyncJsonResponse *response = new AsyncJsonResponse();
-    JsonObject& json = response->getRoot();
-    json[F("services")] = "http://" + request->host() + "/services";
-    json[F("esp")] = "http://" + request->host() + "/esp";
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  // ESP8266 data from https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
+  json[F("vcc")] = ESP.getVcc();
+  json[F("heap")] = ESP.getFreeHeap();
+  json[F("chipId")] = ESP.getChipId();
+  json[F("sdkVersion")] = ESP.getSdkVersion();
+  json[F("coreVersion")] =  ESP.getCoreVersion();
+  json[F("bootVersion")] = ESP.getBootVersion();
+  json[F("bootMode")] = ESP.getBootMode();
+  json[F("cpuFreqMHz")] = ESP.getCpuFreqMHz();
+  json[F("flashChipId")] = ESP.getFlashChipId();
+  json[F("flashChipRealSize")] = ESP.getFlashChipRealSize();
+  json[F("flashChipSize")] = ESP.getFlashChipSize();
+  json[F("flashChipSpeed")] = ESP.getFlashChipSpeed();
+  json[F("flashChipMode")] = ESP.getFlashChipMode();
+  json[F("flashChipSizeByChipId")] = ESP.getFlashChipSizeByChipId();
+  json[F("sketchSize")] = ESP.getSketchSize();
+  json[F("sketchMD5")] = ESP.getSketchMD5();
+  json[F("freeSketchSpace")] = ESP.getFreeSketchSpace();
+  json[F("resetReason")] = ESP.getResetReason();
+  json[F("resetInfo")] = ESP.getResetInfo();
+  json[F("cycleCount")] = ESP.getCycleCount();
+  json[F("uptime")] = millis();
 
-
-    response->setLength();
-    request->send(response);
-  };
-}
-
-ArRequestHandlerFunction Esp8266::getESPInfoFunction() {
-
-  return [](AsyncWebServerRequest *request) {
-    // ESP8266 data from https://github.com/esp8266/Arduino/blob/master/cores/esp8266/Esp.h
-    AsyncJsonResponse *response = new AsyncJsonResponse();
-    JsonObject& json = response->getRoot();
-    json[F("vcc")] = ESP.getVcc();
-    json[F("heap")] = ESP.getFreeHeap();
-    json[F("chipId")] = ESP.getChipId();
-    json[F("sdkVersion")] = ESP.getSdkVersion();
-    json[F("coreVersion")] =  ESP.getCoreVersion();
-    json[F("bootVersion")] = ESP.getBootVersion();
-    json[F("bootMode")] = ESP.getBootMode();
-    json[F("cpuFreqMHz")] = ESP.getCpuFreqMHz();
-    json[F("flashChipId")] = ESP.getFlashChipId();
-    json[F("flashChipRealSize")] = ESP.getFlashChipRealSize();
-    json[F("flashChipSize")] = ESP.getFlashChipSize();
-    json[F("flashChipSpeed")] = ESP.getFlashChipSpeed();
-    json[F("flashChipMode")] = ESP.getFlashChipMode();
-    json[F("flashChipSizeByChipId")] = ESP.getFlashChipSizeByChipId();
-    json[F("sketchSize")] = ESP.getSketchSize();
-    json[F("sketchMD5")] = ESP.getSketchMD5();
-    json[F("freeSketchSpace")] = ESP.getFreeSketchSpace();
-    json[F("resetReason")] = ESP.getResetReason();
-    json[F("resetInfo")] = ESP.getResetInfo();
-    json[F("cycleCount")] = ESP.getCycleCount();
-    json[F("uptime")] = millis();
-
-    response->setLength();
-    request->send(response);
-  };
+  return json;
 }

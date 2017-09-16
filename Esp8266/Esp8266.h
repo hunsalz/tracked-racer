@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
-#include <AsyncJson.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncJson.h
 
 #ifdef ESP8266
 extern "C" {
@@ -11,11 +11,12 @@ extern "C" {
 }
 #endif
 
-#include "Service.h"
 #include "Configuration.h"
+#include "Service.h"
 #include "FSService.h"
 #include "TrackedRacerHandler.h"
 #include "WebService.h"
+
 #include "WiFiAPService.h"
 #include "WiFiStaService.h"
 
@@ -33,10 +34,8 @@ class Esp8266 : public Service {
     bool stop();
 
 		void run();
-
-    ArRequestHandlerFunction getServicesInfoFunction();
-
-    ArRequestHandlerFunction getESPInfoFunction();
+   
+    JsonObject& getESPDetails();
 
 	private:
 
@@ -45,7 +44,6 @@ class Esp8266 : public Service {
 		FSService fsService;
     WebService webService;
 
-    bool _running = false;
 		unsigned long previousTime = millis();
 		unsigned int updateInterval = 5000;
 

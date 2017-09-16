@@ -1,13 +1,16 @@
 #include "WiFiAPService.h"
 
-WiFiAPService::WiFiAPService() {}
+WiFiAPService::WiFiAPService() {
+}
 
 WiFiAPService::~WiFiAPService() {
   stop();
 }
 
 bool WiFiAPService::isRunning() {
-  return _running;
+  
+  // TODO see return WiFi.isConnected();
+  return running;
 }
 
 bool WiFiAPService::start() {
@@ -28,16 +31,12 @@ bool WiFiAPService::start() {
     */
 
     // try to establish a soft AP
-    if (WiFi.softAP(WIFI_AP_SSID, WIFI_AP_PASSWD, WIFI_AP_CHANNEL, WIFI_AP_HIDDEN)) {
+    if (WiFi.softAP(WIFI_AP_SSID, WIFI_AP_PASSWD, WIFI_AP_CHANNEL, WIFI_AP_HIDDEN, WIFI_AP_MAX_CONNECTIONS)) {
       Log.notice(F("Soft AP established successful. IP address of AP is: %s" CR), WiFi.softAPIP().toString().c_str());
-      _running = true;
+      running = true;
     } else {
       Log.error(F("Couldn't establish a soft access point." CR));
     }
-    // try to enable multicast DNS if HOST_NAME is given
-    #ifdef HOST_NAME
-      setupMDNS();
-    #endif
   }
 
   return isRunning();
@@ -47,35 +46,36 @@ bool WiFiAPService::stop() {
 
   if (isRunning()) {
     WiFi.softAPdisconnect();
-    _running = false;
+    running = false;
   }
 
   return isRunning();
 }
 
-bool WiFiAPService::setupMDNS() {
+bool WiFiAPService::setupMDNS(const char* hostName, unsigned int port) {
 
   bool succeeded = false;
   // add <domain name>.local (mDNS)
-  if (MDNS.begin(HOST_NAME)) {
+  if (MDNS.begin(hostName)) {
     // add service
-    MDNS.addService("http", "tcp", 80);
+    MDNS.addService("http", "tcp", port);
     succeeded = true;
   }
 
   if (succeeded) {
-    Log.notice(F("MDNS established for [http://%s.local]" CR), HOST_NAME);
+    Log.notice(F("MDNS established for [http://%s.local]" CR), hostName);
   } else {
-    Log.error(F("MDNS failed for [http://%s.local]" CR), HOST_NAME);
+    Log.error(F("MDNS failed for [http://%s.local]" CR), hostName);
   }
 
   return succeeded;
 }
 
-uint8_t WiFiAPService::getStationNumber() {
-  return WiFi.softAPgetStationNum();
+ESP8266WiFiClass* WiFiAPService::getWiFi() {
+  return &WiFi;
 }
 
+// TODO needed ?
 softap_config* WiFiAPService::getConfig() {
 
   softap_config *config;

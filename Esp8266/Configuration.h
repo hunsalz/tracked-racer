@@ -3,7 +3,7 @@
 //#define DISABLE_LOGGING // uncomment to compile without any log events
 #define LOG_LEVEL LOG_LEVEL_VERBOSE
 
-#define PMW_RANGE 25
+#define PWM_RANGE 25
 
 // pin definitions for L298N motor driver depending on individual hardware setup
 #define PIN_L298N_ENA 5 // D1
@@ -19,18 +19,15 @@
 #define MOTOR_B_SPEED 4 // D2
 #define MOTOR_B_DIR 2 // D4
 
-#define WIFI_SSID_1 "YOUR SSID"
-#define WIFI_PASSWD_1 "***"
-#define WIFI_SSID_2 "YOUR SSID"
-#define WIFI_PASSWD_2 "***"
+
 
 #define WIFI_AP_SSID "MyESP8266"
 #define WIFI_AP_PASSWD "password"
 #define WIFI_AP_CHANNEL 1
 #define WIFI_AP_HIDDEN 0
-#define WIFI_AP_MAX_CONNECTIONS 3
+#define WIFI_AP_MAX_CONNECTIONS 4
 
 #define HOST_NAME "esp8266"
 
 #define HTTP_PORT 80
-#define ROOT_CONTEXT "/index.build.html"
+#define ROOT_CTX "/index.build.html"

@@ -1,8 +1,8 @@
 #include "TrackedRacerHandler.h"
 
-TrackedRacerHandler::TrackedRacerHandler(bool enabled) {
+TrackedRacerHandler::TrackedRacerHandler() {
 
-  shield = new MotorShieldDriver(enabled, MOTOR_A_SPEED, MOTOR_A_DIR, MOTOR_B_SPEED, MOTOR_B_DIR);
+  shield = new MotorShieldDriver(true, MOTOR_A_SPEED, MOTOR_A_DIR, MOTOR_B_SPEED, MOTOR_B_DIR, PWM_RANGE);
   shield->setSpeedA(0);
   shield->setSpeedB(0);
 

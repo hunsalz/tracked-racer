@@ -1,8 +1,9 @@
 #pragma once
 
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
-#include <AsyncJson.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncJson.h
 
+#include "Configuration.h"
 #include "MotorShieldDriver.h"
 #include "WSHandler.h"
 
@@ -10,7 +11,8 @@ class TrackedRacerHandler : public WSHandler {
 
   public:
 
-    TrackedRacerHandler(bool enabled);
+    TrackedRacerHandler();
+    ~TrackedRacerHandler();
 
     void processMessage(AsyncWebSocket *ws, AsyncWebSocketClient *client, JsonObject &json);
 
