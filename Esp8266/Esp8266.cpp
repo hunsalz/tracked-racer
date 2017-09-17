@@ -34,6 +34,9 @@ bool Esp8266::start() {
     webService.on("/wifi", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, wiFiStaService.getWiFiDetails());
     });
+    webService.on("/wifi2", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, wiFiAPService.getSoftAPDetails());
+    });
     webService.on("/fs/details", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, fsService.getStorageDetails());
     });

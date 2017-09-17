@@ -2,6 +2,7 @@
 
 #include <ESP8266WiFi.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 #include <ESP8266mDNS.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/ESP8266mDNS.h
+#include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 
 #ifdef ESP8266
 extern "C" {
@@ -33,8 +34,7 @@ class WiFiAPService : public Service {
     /**
      * returns current configuration of the ESP8266 WiFi soft-AP
      */
-    // TODO needed?
-    softap_config* getConfig();
+    JsonObject& getSoftAPDetails();
 
   private:
 

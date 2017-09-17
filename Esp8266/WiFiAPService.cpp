@@ -75,17 +75,32 @@ ESP8266WiFiClass* WiFiAPService::getWiFi() {
   return &WiFi;
 }
 
-// TODO needed ?
-softap_config* WiFiAPService::getConfig() {
+JsonObject& WiFiAPService::getSoftAPDetails() {
 
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &json = jsonBuffer.createObject();
+  json[F("softAPgetStationNum")] = getWiFi()->softAPgetStationNum();
+  json[F("softAPIP")] = getWiFi()->softAPIP().toString();
+  json[F("softAPmacAddress")] = getWiFi()->softAPmacAddress();
+  
   softap_config *config;
   if (wifi_softap_get_config(config)) {
     Log.verbose(F("Reading soft-AP configuration was successful." CR));
+
+    json[F("ssid")] = config->ssid;
+    json[F("password")] = config->password;
+    json[F("ssidLen")] = config->ssid_len;
+    json[F("channel")] = config->channel;
+    json[F("authmode")] = config->authmode;
+    json[F("ssidHidden")] = config->ssid_hidden;
+    json[F("maxConnections")] = config->max_connection;
+    json[F("beaconInterval")] = config->beacon_interval;
+       
   } else {
     Log.verbose(F("Reading soft-AP configuration failed." CR));
   }
-  
-  return config;
+
+  return json;
 }
 
 
