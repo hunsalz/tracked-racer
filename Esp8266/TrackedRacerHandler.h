@@ -3,15 +3,15 @@
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <AsyncWebSocket.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/AsyncWebSocket.h
 
-#include "Configuration.h"
-#include "MotorShieldDriver.h"
+#include <MotorShieldDriver.h> // https://github.com/hunsalz/esp8266utils
+
 #include "WSHandler.h"
 
 class TrackedRacerHandler : public WSHandler {
 
   public:
 
-    TrackedRacerHandler();
+    TrackedRacerHandler(MotorShieldDriver *shield);
     ~TrackedRacerHandler();
 
     void processMessage(AsyncWebSocket *ws, AsyncWebSocketClient *client, JsonObject &json);

@@ -1,6 +1,8 @@
 #include "Esp8266.h"
 
-Esp8266::Esp8266() : webService(HTTP_PORT, ROOT_CTX) {
+Esp8266::Esp8266() : 
+  shield(true, MOTOR_A_SPEED, MOTOR_A_DIR, MOTOR_B_SPEED, MOTOR_B_DIR, PWM_RANGE),
+  webService(HTTP_PORT, ROOT_CTX) {
 }
 
 Esp8266::~Esp8266() {
@@ -15,6 +17,8 @@ bool Esp8266::start() {
 
   if (!isRunning()) {
     Log.verbose(F("Setup ESP8266 ..." CR));
+
+    
 
     wiFiAPService.start();
     // try to enable multicast DNS if HOST_NAME is given
@@ -43,9 +47,13 @@ bool Esp8266::start() {
     webService.on("/fs/listing", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, fsService.getFileListing());
     });
+    webService.on("/shield", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, shield.getConfig());
+    });
 
     // add ws resource
-    webService.addWebSocket("/racer", new TrackedRacerHandler());
+    
+    webService.addWebSocket("/racer", new TrackedRacerHandler(&shield));
 
     running = true;
 

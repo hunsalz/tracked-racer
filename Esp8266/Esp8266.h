@@ -11,12 +11,13 @@ extern "C" {
 }
 #endif
 
-#include "Configuration.h"
-#include "Service.h"
-#include "FSService.h"
-#include "TrackedRacerHandler.h"
-#include "WebService.h"
+#include <FSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/FSService.h
+#include <MotorShieldDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MotorShieldDriver
+#include <Service.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/Service.h
+#include <WebService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebService
 
+#include "Configuration.h"
+#include "TrackedRacerHandler.h"
 #include "WiFiAPService.h"
 #include "WiFiStaService.h"
 
@@ -39,6 +40,7 @@ class Esp8266 : public Service {
 
 	private:
 
+    MotorShieldDriver shield;
 		WiFiAPService wiFiAPService;
     WiFiStaService wiFiStaService;
 		FSService fsService;
@@ -46,9 +48,4 @@ class Esp8266 : public Service {
 
 		unsigned long previousTime = millis();
 		unsigned int updateInterval = 5000;
-
-    AsyncCallbackWebHandler* servicesInfoHandler;
-    AsyncCallbackWebHandler* espInfoHandler;
-    AsyncCallbackWebHandler* infoHandler;
-    AsyncCallbackWebHandler* listHandler;
 };

@@ -1,11 +1,8 @@
 #include "TrackedRacerHandler.h"
 
-TrackedRacerHandler::TrackedRacerHandler() {
+TrackedRacerHandler::TrackedRacerHandler(MotorShieldDriver *shield) {
 
-  shield = new MotorShieldDriver(true, MOTOR_A_SPEED, MOTOR_A_DIR, MOTOR_B_SPEED, MOTOR_B_DIR, PWM_RANGE);
-  shield->setSpeedA(0);
-  shield->setSpeedB(0);
-
+  this->shield = shield;
   Log.verbose(F("Ready to control motor shield ..." CR));
 };
 

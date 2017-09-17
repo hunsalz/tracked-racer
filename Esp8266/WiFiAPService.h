@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ESP8266WiFi.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/src/ESP8266WiFi.h
 #include <ESP8266mDNS.h> // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/ESP8266mDNS.h
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
