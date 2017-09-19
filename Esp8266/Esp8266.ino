@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(115200);
   Serial.setDebugOutput(false);
   while(!Serial && !Serial.available()) {}
-
+  delay(100);
   Log.begin(LOG_LEVEL, &Serial);
 
   esp8266 = new Esp8266();

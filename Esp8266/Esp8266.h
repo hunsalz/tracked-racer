@@ -5,12 +5,7 @@
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
 
-#ifdef ESP8266
-extern "C" {
-  #include "user_interface.h" // Expressif ESP8266 Non-OS API
-}
-#endif
-
+#include <EspService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/EspService.h
 #include <FSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/FSService.h
 #include <MotorShieldDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MotorShieldDriver
 #include <Service.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/Service.h
@@ -19,7 +14,7 @@ extern "C" {
 #include "Configuration.h"
 #include "TrackedRacerHandler.h"
 #include "WiFiAPService.h"
-#include "WiFiStaService.h"
+#include "WiFiService.h"
 
 class Esp8266 : public Service {
 
@@ -28,22 +23,19 @@ class Esp8266 : public Service {
     Esp8266();
     ~Esp8266();
 
-    bool isRunning();
-
     bool start();
 
     bool stop();
 
 		void run();
-   
-    JsonObject& getESPDetails();
 
 	private:
 
     MotorShieldDriver shield;
-		WiFiAPService wiFiAPService;
-    WiFiStaService wiFiStaService;
-		FSService fsService;
+    EspService espService;
+    FSService fsService;
+    WiFiAPService wiFiAPService;
+    WiFiService wiFiService;
     WebService webService;
 
 		unsigned long previousTime = millis();
