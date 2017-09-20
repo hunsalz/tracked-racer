@@ -1,4 +1,4 @@
-# Smart LEGO Tracked-Racer
+# Smart LEGO Tracked Racer
 
 Control your LEGO Technic 42065 RC Tracked Racer via web application instead of using included RC.
 
@@ -27,7 +27,7 @@ Various controller versions with the idea of using motion control of my smartpho
 
 [JSFiddle - Adapted second version](https://jsfiddle.net/hunsalz/xh6ny11p/)
 
-Technically motion control works perfectly. - But unfortunately it was very unhandy for controlling the vehicle. Finally the least exciting design was chosen as the winner:
+Technically motion control works perfectly. - But unfortunately it was very unhandy for controlling the vehicle. Finally the least exciting design becomes the winner:
 
 [JSFiddle - Latest Version](https://jsfiddle.net/hunsalz/1tgfpvgL/)
 
