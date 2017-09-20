@@ -19,8 +19,9 @@ bool Esp8266::start() {
     wiFiService.setupWiFi();
     wiFiService.start();
 
-    wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD, WIFI_AP_CHANNEL, WIFI_AP_HIDDEN, WIFI_AP_MAX_CONNECTIONS);  
     wiFiAPService.enableMDNS(HOST_NAME, HTTP_PORT);
+
+    wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD, WIFI_AP_CHANNEL, WIFI_AP_HIDDEN, WIFI_AP_MAX_CONNECTIONS);  
     wiFiAPService.start();
 
     espService.start();
@@ -30,15 +31,13 @@ bool Esp8266::start() {
     // add http resources
     webService.on("/esp", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, espService.getDetails());
-    });
-    
+    });  
     webService.on("/wifi", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, wiFiService.getDetails());
     });
     webService.on("/ap", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, wiFiAPService.getDetails());
-    });
-    
+    }); 
     webService.on("/fs/details", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, fsService.getStorageDetails());
     });

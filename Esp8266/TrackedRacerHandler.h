@@ -5,18 +5,16 @@
 
 #include <MotorShieldDriver.h> // https://github.com/hunsalz/esp8266utils
 
-#include "WSHandler.h"
+#include "WebSocketListener.h"
 
-class TrackedRacerHandler : public WSHandler {
+class TrackedRacerHandler : public WebSocketListener {
 
   public:
 
     TrackedRacerHandler(MotorShieldDriver *shield);
     ~TrackedRacerHandler();
 
-    void processMessage(AsyncWebSocket *ws, AsyncWebSocketClient *client, JsonObject &json);
-
-    void notify(AsyncWebSocket *ws, AsyncWebSocketClient *client, String type, bool broadcast);
+    void process(AsyncWebSocket *ws, AsyncWebSocketClient *client, JsonObject &json);
 
   private:
 
