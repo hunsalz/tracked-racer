@@ -48,8 +48,22 @@ bool Esp8266::start() {
       webService.send(request, shield.getDetails());
     });
 
-    // add ws resource  
-    webService.addWebSocket("/racer", new TrackedRacerHandler(&shield));
+    // add ws resource
+    WebSocketListener wsl;
+    wsl.onTextMessage([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
+
+      DynamicJsonBuffer buffer;
+      JsonVariant variant = buffer.parse((char*)data);
+      if (variant.is<JsonObject&>()) {
+        JsonObject &json = variant.as<JsonObject&>();
+        processRequest(json);
+        sendResponse(client); 
+      } else {
+        // TODO send payload too?
+        client->text(F("Unexpected message"));
+      }
+    });  
+    webService.addWebSocket("/racer", &wsl);
 
     running = true;
 
@@ -82,3 +96,35 @@ void Esp8266::run() {
     // loop or do something else here
   }
 }
+
+
+
+void Esp8266::processRequest(JsonObject &json) {
+
+  const char* speedA = json["motorA"];
+  const char* speedB = json["motorB"];
+  const char* mode = json["mode"];
+
+  if (strcmp("absolute", mode) == 0) {
+    shield.setSpeedA(atoi(speedA));
+    shield.setSpeedB(atoi(speedB));
+  } else {
+    shield.applySpeedA(atoi(speedA));
+    shield.applySpeedB(atoi(speedB));
+  }
+}
+
+void Esp8266::sendResponse(AsyncWebSocketClient *client) {
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject& json = jsonBuffer.createObject();
+  json["clientId"] = client->id();
+  json["motorA"] = shield.getSpeedA();
+  json["motorB"] = shield.getSpeedB();
+
+  int length = json.measureLength() + 1;
+  char payload[length];
+  json.printTo(payload, length);
+  client->text(payload); 
+}
+

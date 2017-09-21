@@ -10,11 +10,11 @@
 #include <MotorShieldDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MotorShieldDriver
 #include <Service.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/Service.h
 #include <WebService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebService
+#include <WebSocketListener.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebSocketListener
+#include <WiFiAPService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiAPService
+#include <WiFiService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiService
 
 #include "Configuration.h"
-#include "TrackedRacerHandler.h"
-#include "WiFiAPService.h"
-#include "WiFiService.h"
 
 class Esp8266 : public Service {
 
@@ -40,4 +40,7 @@ class Esp8266 : public Service {
 
 		unsigned long previousTime = millis();
 		unsigned int updateInterval = 5000;
+
+    void processRequest(JsonObject &json);
+    void sendResponse(AsyncWebSocketClient *client);
 };
