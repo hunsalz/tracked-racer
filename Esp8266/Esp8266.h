@@ -7,7 +7,7 @@
 
 #include <EspService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/EspService.h
 #include <FSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/FSService.h
-#include <MotorShieldDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MotorShieldDriver
+#include <MotorDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MotorShieldDriver
 #include <Service.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/Service.h
 #include <WebService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebService
 #include <WebSocketListener.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebSocketListener
@@ -31,7 +31,9 @@ class Esp8266 : public Service {
 
 	private:
 
-    MotorShieldDriver shield;
+    WebSocketListener wsl;
+    MotorDriver motorA;
+    MotorDriver motorB;
     EspService espService;
     FSService fsService;
     WiFiAPService wiFiAPService;
@@ -39,8 +41,5 @@ class Esp8266 : public Service {
     WebService webService;
 
 		unsigned long previousTime = millis();
-		unsigned int updateInterval = 5000;
-
-    void processRequest(JsonObject &json);
-    void sendResponse(AsyncWebSocketClient *client);
+		unsigned int updateInterval = 2000;
 };

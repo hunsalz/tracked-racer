@@ -5,21 +5,16 @@
 
 #define PWM_RANGE 25
 
-// pin definitions for L298N motor driver depending on individual hardware setup
-#define PIN_L298N_ENA 5 // D1
-#define PIN_L298N_IN1 4 // D2
-#define PIN_L298N_IN2 0 // D3
-#define PIN_L298N_ENB 14 // D5
-#define PIN_L298N_IN3 12 // D6
-#define PIN_L298N_IN4 13 // D7
-
 // pin definition for motor shield
-#define MOTOR_A_SPEED 5 // D1
+#define MOTOR_A_PWM 5 // D1
 #define MOTOR_A_DIR 0  // D3
-#define MOTOR_B_SPEED 4 // D2
+#define MOTOR_B_PWM 4 // D2
 #define MOTOR_B_DIR 2 // D4
 
-
+#define WIFI_SSID_1 "xxx"
+#define WIFI_PASSWD_1 "xxx"
+#define WIFI_SSID_2 "xxx"
+#define WIFI_PASSWD_2 "xxx"
 
 #define WIFI_AP_SSID "MyESP8266"
 #define WIFI_AP_PASSWD "password"

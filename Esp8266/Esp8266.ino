@@ -11,7 +11,8 @@ void setup() {
   while(!Serial && !Serial.available()) {}
 
   Log.begin(LOG_LEVEL, &Serial);
-
+  Log.verbose(F("" CR));
+  
   esp8266 = new Esp8266();
   esp8266->start();
 }

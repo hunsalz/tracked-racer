@@ -1,7 +1,8 @@
 #include "Esp8266.h"
 
-Esp8266::Esp8266() : 
-  shield(true, MOTOR_A_SPEED, MOTOR_A_DIR, MOTOR_B_SPEED, MOTOR_B_DIR, PWM_RANGE),
+Esp8266::Esp8266() :
+  motorA(true, MOTOR_A_PWM, MOTOR_A_DIR, PWM_RANGE),
+  motorB(true, MOTOR_B_PWM, MOTOR_B_DIR, PWM_RANGE),
   webService(HTTP_PORT, ROOT_CTX) {
 }
 
@@ -10,7 +11,7 @@ Esp8266::~Esp8266() {
 }
 
 bool Esp8266::start() {
-
+  
   if (!isRunning()) {
     Log.verbose(F("Setup ESP8266 ..." CR));
 
@@ -21,7 +22,7 @@ bool Esp8266::start() {
 
     wiFiAPService.enableMDNS(HOST_NAME, HTTP_PORT);
 
-    wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD, WIFI_AP_CHANNEL, WIFI_AP_HIDDEN, WIFI_AP_MAX_CONNECTIONS);  
+    wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD, WIFI_AP_CHANNEL, WIFI_AP_HIDDEN, WIFI_AP_MAX_CONNECTIONS);
     wiFiAPService.start();
 
     espService.start();
@@ -31,39 +32,75 @@ bool Esp8266::start() {
     // add http resources
     webService.on("/esp", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, espService.getDetails());
-    });  
+    });
     webService.on("/wifi", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, wiFiService.getDetails());
     });
     webService.on("/ap", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, wiFiAPService.getDetails());
-    }); 
+    });
     webService.on("/fs/details", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, fsService.getStorageDetails());
     });
     webService.on("/fs/listing", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, fsService.getFileListing());
     });
-    webService.on("/shield", HTTP_GET, [this](AsyncWebServerRequest *request) {
-      webService.send(request, shield.getDetails());
+    webService.on("/motor/a", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, motorA.getDetails());
+    });
+    webService.on("/motor/b", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, motorB.getDetails());
     });
 
-    // add ws resource
-    WebSocketListener wsl;
+    // implement control commands received by WebSocket connection
     wsl.onTextMessage([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
       DynamicJsonBuffer buffer;
-      JsonVariant variant = buffer.parse((char*)data);
+      JsonVariant variant = buffer.parse((char*)data);   
       if (variant.is<JsonObject&>()) {
+
         JsonObject &json = variant.as<JsonObject&>();
-        processRequest(json);
-        sendResponse(client); 
+        // process JSON instructions
+        int speedA = atoi(json["motorA"]);
+        int speedB = atoi(json["motorB"]);
+        const char* mode = json["mode"];
+      
+        Log.verbose(F("A = %d and B = %d pwmRange = %d" CR), speedA, speedB, motorA.getPWMRange());
+      
+        if (strcmp("absolute", mode) == 0) {
+          motorA.setSpeed(speedA);
+          motorB.setSpeed(speedB);
+        } else {
+          motorA.applySpeed(speedA);
+          motorB.applySpeed(speedB);
+        }
+
+        // send reply to client
+        DynamicJsonBuffer buffer;
+        JsonObject& reply = buffer.createObject();
+        reply["clientId"] = client->id();
+        reply["motorA"] = motorA.getSpeed();
+        reply["motorB"] = motorB.getSpeed();
+
+        // TODO utility function object json -> char[]
+
+        int length = reply.measureLength() + 1;
+        char payload[length];
+        reply.printTo(payload, length);
+        client->text(payload);
+              
       } else {
         // TODO send payload too?
         client->text(F("Unexpected message"));
       }
-    });  
-    webService.addWebSocket("/racer", &wsl);
+    });
+
+    // create WebSocket
+    AsyncWebSocket* webSocket = new AsyncWebSocket("/racer");
+    webSocket->onEvent([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+      wsl.onEvent(ws, client, type, arg, data, len);
+    });
+    webService.getWebServer()->addHandler(webSocket);
 
     running = true;
 
@@ -93,38 +130,6 @@ void Esp8266::run() {
   if ((previousTime + updateInterval) < millis()) {
     previousTime = millis();
 
-    // loop or do something else here
+    // continous loop or do something else here
   }
 }
-
-
-
-void Esp8266::processRequest(JsonObject &json) {
-
-  const char* speedA = json["motorA"];
-  const char* speedB = json["motorB"];
-  const char* mode = json["mode"];
-
-  if (strcmp("absolute", mode) == 0) {
-    shield.setSpeedA(atoi(speedA));
-    shield.setSpeedB(atoi(speedB));
-  } else {
-    shield.applySpeedA(atoi(speedA));
-    shield.applySpeedB(atoi(speedB));
-  }
-}
-
-void Esp8266::sendResponse(AsyncWebSocketClient *client) {
-
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject& json = jsonBuffer.createObject();
-  json["clientId"] = client->id();
-  json["motorA"] = shield.getSpeedA();
-  json["motorB"] = shield.getSpeedB();
-
-  int length = json.measureLength() + 1;
-  char payload[length];
-  json.printTo(payload, length);
-  client->text(payload); 
-}
-
