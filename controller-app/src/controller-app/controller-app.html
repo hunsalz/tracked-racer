@@ -29,6 +29,8 @@
       .control {
         display: inline-flex;
         flex-flow: column nowrap;
+        justify-content: center;
+        align-content: center;
         align-items: center;
         position: absolute;
         top: 50%;
@@ -52,13 +54,15 @@
         display: inline-flex;
         flex-flow: column nowrap;
         justify-content: center;
+        align-content: center;
+        align-items: center;
         min-height: 32vw;
       }
 
       iron-icon {
         color: var(--state-color, var(--paper-orange-700));
-        width: 8vh;
-        height: 8vh;
+        width: 8vw;
+        height: 8vw;
         transform: rotate(90deg);
       }
 
@@ -71,37 +75,37 @@
       input[type=range]::-webkit-slider-runnable-track {
         -webkit-appearance: none;
         width: 100%;
-        height: 1vh;
+        height: 1vw;
         border: none;
         background: white;
       }
 
       input[type=range]::-moz-range-track {
         width: 100%;
-        height: 1vh;
+        height: 1vw;
         border: none;
         background: white;
       }
 
       input[type=range]::-webkit-slider-thumb {
         -webkit-appearance: none;
-        height: 7vw;
-        width: 7vw;
-        margin-top: -3vw;
+        height: 12vw;
+        width: 12vw;
+        margin-top: -6vw;
         border-radius: 50%;
-        border: 2vh solid white;
+        border: 2vw solid white;
         box-shadow: 0vh 0vh 1vh rgba(0, 0, 0, .8);
-        background: #455a64;
+        background: var(--paper-orange-700);
       }
 
       input[type=range]::-moz-range-thumb {
-        height: 7vw;
-        width: 7vw;
-        margin-top: -3vw;
+        height: 9vw;
+        width: 9vw;
+        margin-top: -4vw;
         border-radius: 50%;
-        border: 2vh solid white;
+        border: 2vw solid white;
         box-shadow: 0vh 0vh 1vh rgba(0, 0, 0, .8);
-        background: #455a64;
+        background: var(--paper-orange-700);
       }
 
       input[type=range]:focus {
@@ -123,13 +127,13 @@
 
     <div class="container">
       <div class="control">
-        <div class="value">[[motorA]]</div>
+        <div class="value">[[_getPercent(motorA)]]%</div>
         <input type="range" value="{{motorA::input}}" min="-[[range]]" max="[[range]]" step="[[step]]"></input>
         <div class="middle">
           <iron-icon icon="icons:settings-remote"></iron-icon>
         </div>
         <input type="range" value="{{motorB::input}}" min="-[[range]]" max="[[range]]" step="[[step]]"></input>
-        <div class="value">[[motorB]]</div>
+        <div class="value">[[_getPercent(motorB)]]%</div>
       </div>
     </div>
     <web-socket id="ws"
@@ -152,8 +156,8 @@
         return {
           url: {
             type: String,
-            value: 'ws://' + window.location.hostname + ':8000/racer'
-            //value: 'ws://' + window.location.hostname + ':80/racer'
+            //value: 'ws://' + window.location.hostname + ':8000/racer'
+            value: 'ws://' + window.location.hostname + ':80/racer'
           },
           state: {
             type: Number,
@@ -190,7 +194,6 @@
       _handleWSStateChanges() {
 
         var _color = 'var(--paper-orange-700)';
-        console.log("state = " + this.state);
         switch (this.state) {
           case 1:
             _color = 'var(--paper-green-700)';
@@ -204,6 +207,10 @@
         this.updateStyles({
           '--state-color': _color
         });
+      }
+
+      _getPercent(value) {
+        return 100 / this.range * value;
       }
     }
     window.customElements.define(ControllerApp.is, ControllerApp);
