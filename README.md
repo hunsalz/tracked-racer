@@ -31,7 +31,7 @@ Technically motion control works perfectly. - But unfortunately it was very unha
 
 Finally the least exciting design became the winner:
 
-![Controller](https://user-images.githubusercontent.com/16960855/30973828-5d66fd42-a46e-11e7-98a2-cb32a9309094.png)
+![controller](https://user-images.githubusercontent.com/16960855/30988069-68acddb8-a499-11e7-84b7-44836a44ae3a.png)
 
 [JSFiddle - Latest JSFiddle Version](https://jsfiddle.net/hunsalz/1tgfpvgL/)
 
