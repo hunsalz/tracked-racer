@@ -4,6 +4,7 @@
 
 <link rel="import" href="../../bower_components/paper-styles/color.html">
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="../../bower_components/web-socket/web-socket.html">
 
@@ -28,8 +29,6 @@
       .control {
         display: inline-flex;
         flex-flow: column nowrap;
-        justify-content: center;
-        align-content: center;
         align-items: center;
         position: absolute;
         top: 50%;
@@ -48,9 +47,19 @@
         transform: rotate(90deg);
       }
 
-      .spacer {
+      .middle {
         flex: 1 1 auto;
+        display: inline-flex;
+        flex-flow: column nowrap;
+        justify-content: center;
         min-height: 32vw;
+      }
+
+      iron-icon {
+        color: var(--state-color, var(--paper-orange-700));
+        width: 8vh;
+        height: 8vh;
+        transform: rotate(90deg);
       }
 
       input[type=range] {
@@ -62,36 +71,36 @@
       input[type=range]::-webkit-slider-runnable-track {
         -webkit-appearance: none;
         width: 100%;
-        height: 8px;
+        height: 1vh;
         border: none;
         background: white;
       }
 
       input[type=range]::-moz-range-track {
         width: 100%;
-        height: 8px;
+        height: 1vh;
         border: none;
         background: white;
       }
 
       input[type=range]::-webkit-slider-thumb {
         -webkit-appearance: none;
-        height: 56px;
-        width: 56px;
+        height: 7vw;
+        width: 7vw;
+        margin-top: -3vw;
         border-radius: 50%;
-        margin-top: -24px;
-        border: 16px solid white;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, .8);
+        border: 2vh solid white;
+        box-shadow: 0vh 0vh 1vh rgba(0, 0, 0, .8);
         background: #455a64;
       }
 
       input[type=range]::-moz-range-thumb {
-        height: 36px;
-        width: 36px;
+        height: 7vw;
+        width: 7vw;
+        margin-top: -3vw;
         border-radius: 50%;
-        margin-top: -24px;
-        border: 16px solid white;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, .8);
+        border: 2vh solid white;
+        box-shadow: 0vh 0vh 1vh rgba(0, 0, 0, .8);
         background: #455a64;
       }
 
@@ -116,7 +125,9 @@
       <div class="control">
         <div class="value">[[motorA]]</div>
         <input type="range" value="{{motorA::input}}" min="-[[range]]" max="[[range]]" step="[[step]]"></input>
-        <div class="spacer"></div>
+        <div class="middle">
+          <iron-icon icon="icons:settings-remote"></iron-icon>
+        </div>
         <input type="range" value="{{motorB::input}}" min="-[[range]]" max="[[range]]" step="[[step]]"></input>
         <div class="value">[[motorB]]</div>
       </div>
@@ -124,6 +135,7 @@
     <web-socket id="ws"
                 auto
                 url="[[url]]"
+                state="{{state}}"
                 verbose>
     <web-socket>
   </template>
@@ -142,6 +154,11 @@
             type: String,
             value: 'ws://' + window.location.hostname + ':8000/racer'
             //value: 'ws://' + window.location.hostname + ':80/racer'
+          },
+          state: {
+            type: Number,
+            observer: '_handleWSStateChanges',
+            notify: true
           },
           range: {
             type: Number,
@@ -168,6 +185,25 @@
 
       _changed() {
         this.$.ws.send({motorA: this.motorA, motorB: this.motorB, mode: 'absolute'});
+      }
+
+      _handleWSStateChanges() {
+
+        var _color = 'var(--paper-orange-700)';
+        console.log("state = " + this.state);
+        switch (this.state) {
+          case 1:
+            _color = 'var(--paper-green-700)';
+            break;
+          case 3:
+            _color = 'var(--paper-red-700)';
+            break;
+          default:
+            _color = 'var(--paper-orange-700)';
+        }
+        this.updateStyles({
+          '--state-color': _color
+        });
       }
     }
     window.customElements.define(ControllerApp.is, ControllerApp);
