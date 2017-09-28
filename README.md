@@ -27,9 +27,13 @@ Various controller versions with the idea of using motion control of my smartpho
 
 [JSFiddle - Adapted second version](https://jsfiddle.net/hunsalz/xh6ny11p/)
 
-Technically motion control works perfectly. - But unfortunately it was very unhandy for controlling the vehicle. Finally the least exciting design becomes the winner:
+Technically motion control works perfectly. - But unfortunately it was very unhandy for controlling the vehicle. 
 
-[JSFiddle - Latest Version](https://jsfiddle.net/hunsalz/1tgfpvgL/)
+Finally the least exciting design became the winner:
+
+![controller](https://user-images.githubusercontent.com/16960855/30988069-68acddb8-a499-11e7-84b7-44836a44ae3a.png)
+
+[JSFiddle - Latest JSFiddle Version](https://jsfiddle.net/hunsalz/1tgfpvgL/)
 
 ## Build and run
 
