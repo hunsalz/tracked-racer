@@ -22,7 +22,7 @@ bool Esp8266::start() {
 
     wiFiAPService.enableMDNS(HOST_NAME, HTTP_PORT);
 
-    wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD, WIFI_AP_CHANNEL, WIFI_AP_HIDDEN, WIFI_AP_MAX_CONNECTIONS);
+    wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD);
     wiFiAPService.start();
 
     espService.start();
@@ -127,7 +127,7 @@ bool Esp8266::stop() {
 
 void Esp8266::run() {
 
-  if ((previousTime + updateInterval) < millis()) {
+  if ((previousTime + UPDATE_INTERVAL) < millis()) {
     previousTime = millis();
 
     // continous loop or do something else here

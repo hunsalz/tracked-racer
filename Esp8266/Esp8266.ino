@@ -2,6 +2,8 @@
 
 #include "Esp8266.h"
 
+//#define DISABLE_LOGGING // uncomment to compile without any log events
+
 Esp8266 *esp8266;
 
 void setup() {
@@ -10,7 +12,7 @@ void setup() {
   Serial.setDebugOutput(false);
   while(!Serial && !Serial.available()) {}
 
-  Log.begin(LOG_LEVEL, &Serial);
+  Log.begin(LOG_LEVEL_VERBOSE, &Serial);
   Log.verbose(F("" CR));
   
   esp8266 = new Esp8266();

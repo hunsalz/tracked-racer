@@ -14,8 +14,6 @@
 #include <WiFiAPService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiAPService
 #include <WiFiService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiService
 
-#include "Configuration.h"
-
 class Esp8266 : public Service {
 
 	public:
@@ -41,5 +39,32 @@ class Esp8266 : public Service {
     WebService webService;
 
 		unsigned long previousTime = millis();
-		unsigned int updateInterval = 2000;
+
+    // const definitions
+    
+		const uint16_t UPDATE_INTERVAL = 5000;
+
+    const uint8_t PWM_RANGE = 25;
+    
+    // pin definition for motor shield
+    const uint8_t MOTOR_A_PWM = 5; // D1
+    const uint8_t MOTOR_A_DIR = 0; // D3
+    const uint8_t MOTOR_B_PWM = 4; // D2
+    const uint8_t MOTOR_B_DIR = 2; // D4
+
+    // wiFi settings
+    const char* WIFI_SSID_1 = "xxx";
+    const char* WIFI_PASSWD_1 = "xxx";
+    const char* WIFI_SSID_2 = "xxx";
+    const char* WIFI_PASSWD_2 = "xxx";
+
+    const char* WIFI_AP_SSID = "MyESP8266";
+    const char* WIFI_AP_PASSWD = "password";
+
+    // MDNS settings
+    const char* HOST_NAME = "esp8266";
+
+    // web server settings
+    const uint8_t HTTP_PORT = 80;
+    const char* ROOT_CTX = "/index.build.html";
 };
