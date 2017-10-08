@@ -14,6 +14,15 @@
 #include <WiFiAPService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiAPService
 #include <WiFiService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiService
 
+using esp8266util::EspService;
+using esp8266util::FSService;
+using esp8266util::MotorDriver;
+using esp8266util::Service;
+using esp8266util::WebService;
+using esp8266util::WebSocketListener;
+using esp8266util::WiFiAPService;
+using esp8266util::WiFiService;
+
 class Esp8266 : public Service {
 
 	public:
@@ -53,10 +62,10 @@ class Esp8266 : public Service {
     const uint8_t MOTOR_B_DIR = 2; // D4
 
     // wiFi settings
-    const char* WIFI_SSID_1 = "xxx";
-    const char* WIFI_PASSWD_1 = "xxx";
-    const char* WIFI_SSID_2 = "xxx";
-    const char* WIFI_PASSWD_2 = "xxx";
+    const char* WIFI_SSID_1 = "***";
+    const char* WIFI_PASSWD_1 = "***";
+    const char* WIFI_SSID_2 = "***";
+    const char* WIFI_PASSWD_2 = "***";
 
     const char* WIFI_AP_SSID = "MyESP8266";
     const char* WIFI_AP_PASSWD = "password";

@@ -15,6 +15,7 @@ bool Esp8266::start() {
   if (!isRunning()) {
     Log.verbose(F("Setup ESP8266 ..." CR));
 
+    // setup wiFi
     wiFiService.addAP(WIFI_SSID_1, WIFI_PASSWD_1);
     wiFiService.addAP(WIFI_SSID_2, WIFI_PASSWD_2);
     wiFiService.setupWiFi();
@@ -25,6 +26,7 @@ bool Esp8266::start() {
     wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD);
     wiFiAPService.start();
 
+    // setup further services
     espService.start();
     fsService.start();
     webService.start();
@@ -52,21 +54,22 @@ bool Esp8266::start() {
       webService.send(request, motorB.getDetails());
     });
 
-    // implement control commands received by WebSocket connection
+    // implement controls of onTextMessage(...)
     wsl.onTextMessage([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
       DynamicJsonBuffer buffer;
       JsonVariant variant = buffer.parse((char*)data);   
       if (variant.is<JsonObject&>()) {
 
-        JsonObject &json = variant.as<JsonObject&>();
         // process JSON instructions
+        JsonObject &json = variant.as<JsonObject&>();
         int speedA = atoi(json["motorA"]);
         int speedB = atoi(json["motorB"]);
         const char* mode = json["mode"];
       
-        Log.verbose(F("A = %d and B = %d pwmRange = %d" CR), speedA, speedB, motorA.getPWMRange());
-      
+        Log.verbose(F("Motor A = %d and Motor B = %d PWM range = %d" CR), speedA, speedB, motorA.getPWMRange());
+
+        // decide which mode to use
         if (strcmp("absolute", mode) == 0) {
           motorA.setSpeed(speedA);
           motorB.setSpeed(speedB);
@@ -75,22 +78,19 @@ bool Esp8266::start() {
           motorB.applySpeed(speedB);
         }
 
-        // send reply to client
+        // create reply message
         DynamicJsonBuffer buffer;
         JsonObject& reply = buffer.createObject();
         reply["clientId"] = client->id();
         reply["motorA"] = motorA.getSpeed();
         reply["motorB"] = motorB.getSpeed();
 
-        // TODO utility function object json -> char[]
-
-        int length = reply.measureLength() + 1;
+        // send reply message
+        uint16_t length = reply.measureLength() + 1;
         char payload[length];
         reply.printTo(payload, length);
-        client->text(payload);
-              
+        client->text(payload);            
       } else {
-        // TODO send payload too?
         client->text(F("Unexpected message"));
       }
     });
