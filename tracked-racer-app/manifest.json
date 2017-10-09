@@ -1,0 +1,7 @@
+{
+  "name": "A controller app for LEGO Technic 42065 RC Tracked Racer",
+  "short_name": "Controller App",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape"
+}
