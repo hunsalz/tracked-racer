@@ -1,13 +1,15 @@
 #include "Esp8266.h"
 
 Esp8266::Esp8266() :
-  motorA(true, MOTOR_A_PWM, MOTOR_A_DIR, PWM_RANGE),
-  motorB(true, MOTOR_B_PWM, MOTOR_B_DIR, PWM_RANGE),
-  webService(HTTP_PORT, ROOT_CTX) {
+  webService(80, "/index.build.html") {
 }
 
 Esp8266::~Esp8266() {
   stop();
+}
+
+bool Esp8266::isRunning() {
+  return running;
 }
 
 bool Esp8266::start() {
@@ -15,13 +17,17 @@ bool Esp8266::start() {
   if (!isRunning()) {
     Log.verbose(F("Setup ESP8266 ..." CR));
 
+    // setup hardware components
+    motorA.setup(MOTOR_A_PWM, MOTOR_A_DIR, PWM_RANGE),
+    motorB.setup(MOTOR_B_PWM, MOTOR_B_DIR, PWM_RANGE),
+
     // setup wiFi
     wiFiService.addAP(WIFI_SSID_1, WIFI_PASSWD_1);
     wiFiService.addAP(WIFI_SSID_2, WIFI_PASSWD_2);
     wiFiService.setupWiFi();
     wiFiService.start();
 
-    wiFiAPService.enableMDNS(HOST_NAME, HTTP_PORT);
+    wiFiAPService.enableMDNS("esp8266", 80);
 
     wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD);
     wiFiAPService.start();
@@ -67,7 +73,7 @@ bool Esp8266::start() {
         int speedB = atoi(json["motorB"]);
         const char* mode = json["mode"];
       
-        Log.verbose(F("Motor A = %d and Motor B = %d PWM range = %d" CR), speedA, speedB, motorA.getPWMRange());
+        Log.verbose(F("Set motor A = %d and motor B = %d, PWM range = %d" CR), speedA, speedB, motorA.getPWMRange());
 
         // decide which mode to use
         if (strcmp("absolute", mode) == 0) {
@@ -80,15 +86,15 @@ bool Esp8266::start() {
 
         // create reply message
         DynamicJsonBuffer buffer;
-        JsonObject& reply = buffer.createObject();
-        reply["clientId"] = client->id();
-        reply["motorA"] = motorA.getSpeed();
-        reply["motorB"] = motorB.getSpeed();
+        JsonObject& message = buffer.createObject();
+        message["clientId"] = client->id();
+        message["motorA"] = motorA.getSpeed();
+        message["motorB"] = motorB.getSpeed();
 
         // send reply message
-        uint16_t length = reply.measureLength() + 1;
+        uint16_t length = message.measureLength() + 1;
         char payload[length];
-        reply.printTo(payload, length);
+        message.printTo(payload, length);
         client->text(payload);            
       } else {
         client->text(F("Unexpected message"));
@@ -130,6 +136,6 @@ void Esp8266::run() {
   if ((previousTime + UPDATE_INTERVAL) < millis()) {
     previousTime = millis();
 
-    // continous loop or do something else here
+    // do something else here
   }
 }

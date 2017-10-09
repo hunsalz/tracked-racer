@@ -14,6 +14,7 @@
 #include <WiFiAPService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiAPService
 #include <WiFiService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiService
 
+
 using esp8266util::EspService;
 using esp8266util::FSService;
 using esp8266util::MotorDriver;
@@ -30,6 +31,8 @@ class Esp8266 : public Service {
     Esp8266();
     ~Esp8266();
 
+    bool isRunning();
+
     bool start();
 
     bool stop();
@@ -38,7 +41,6 @@ class Esp8266 : public Service {
 
 	private:
 
-    WebSocketListener wsl;
     MotorDriver motorA;
     MotorDriver motorB;
     EspService espService;
@@ -46,6 +48,9 @@ class Esp8266 : public Service {
     WiFiAPService wiFiAPService;
     WiFiService wiFiService;
     WebService webService;
+    WebSocketListener wsl;
+
+    bool running = false;
 
 		unsigned long previousTime = millis();
 
@@ -69,11 +74,4 @@ class Esp8266 : public Service {
 
     const char* WIFI_AP_SSID = "MyESP8266";
     const char* WIFI_AP_PASSWD = "password";
-
-    // MDNS settings
-    const char* HOST_NAME = "esp8266";
-
-    // web server settings
-    const uint8_t HTTP_PORT = 80;
-    const char* ROOT_CTX = "/index.build.html";
 };
