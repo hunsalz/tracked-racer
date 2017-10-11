@@ -7,6 +7,7 @@
 
 #include <EspService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/EspService.h
 #include <FSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/FSService.h
+#include <MDNSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MDNSService.h
 #include <MotorDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MotorShieldDriver
 #include <Service.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/Service.h
 #include <WebService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebService
@@ -14,17 +15,7 @@
 #include <WiFiAPService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiAPService
 #include <WiFiService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiService
 
-
-using esp8266util::EspService;
-using esp8266util::FSService;
-using esp8266util::MotorDriver;
-using esp8266util::Service;
-using esp8266util::WebService;
-using esp8266util::WebSocketListener;
-using esp8266util::WiFiAPService;
-using esp8266util::WiFiService;
-
-class Esp8266 : public Service {
+class Esp8266 : public esp8266util::Service {
 
 	public:
 
@@ -41,14 +32,15 @@ class Esp8266 : public Service {
 
 	private:
 
-    MotorDriver motorA;
-    MotorDriver motorB;
-    EspService espService;
-    FSService fsService;
-    WiFiAPService wiFiAPService;
-    WiFiService wiFiService;
-    WebService webService;
-    WebSocketListener wsl;
+    esp8266util::MotorDriver motorA;
+    esp8266util::MotorDriver motorB;
+    esp8266util::EspService espService;
+    esp8266util::FSService fsService;
+    esp8266util::MDNSService mdnsService;
+    esp8266util::WiFiAPService wiFiAPService;
+    esp8266util::WiFiService wiFiService;
+    esp8266util::WebService webService;
+    esp8266util::WebSocketListener wsl;
 
     bool running = false;
 
@@ -67,10 +59,10 @@ class Esp8266 : public Service {
     const uint8_t MOTOR_B_DIR = 2; // D4
 
     // wiFi settings
-    const char* WIFI_SSID_1 = "***";
-    const char* WIFI_PASSWD_1 = "***";
-    const char* WIFI_SSID_2 = "***";
-    const char* WIFI_PASSWD_2 = "***";
+    const char* WIFI_SSID_1 = "Sputnik";
+    const char* WIFI_PASSWD_1 = "!--Sputnik--!";
+    const char* WIFI_SSID_2 = "visitors";
+    const char* WIFI_PASSWD_2 = "kA!3MD.kE-92BVtx";
 
     const char* WIFI_AP_SSID = "MyESP8266";
     const char* WIFI_AP_PASSWD = "password";
