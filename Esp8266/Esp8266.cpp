@@ -28,15 +28,14 @@ bool Esp8266::start() {
     wiFiService.setup();
     wiFiService.start();
 
+    // setup WiFi access point
+    wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD);
+    wiFiAPService.start();
+
     // setup MDNS
     mdnsService.setup("esp8266");
     mdnsService.getMDNSResponder()->addService("http", "tcp", 80);
     mdnsService.start();
-
-    //wiFiAPService.enableMDNS("esp8266", 80);
-
-    wiFiAPService.setup(WIFI_AP_SSID, WIFI_AP_PASSWD);
-    wiFiAPService.start();
 
     // setup further services
     espService.start();
@@ -58,6 +57,9 @@ bool Esp8266::start() {
     });
     webService.on("/ap", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, wiFiAPService.getDetails());
+    });
+    webService.on("/mdns", HTTP_GET, [this](AsyncWebServerRequest *request) {
+      webService.send(request, mdnsService.getDetails());
     });
     webService.on("/fs/details", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, fsService.getStorageDetails());
@@ -147,6 +149,8 @@ void Esp8266::run() {
 
   if ((previousTime + UPDATE_INTERVAL) < millis()) {
     previousTime = millis();
+
+    mdnsService.getMDNSResponder()->update();
 
     // do something else here
   }
