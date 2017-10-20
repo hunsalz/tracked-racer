@@ -39,7 +39,9 @@ Finally the least exciting design became the winner:
 
 ### Build Web-App with [Polymer 2.0](https://www.polymer-project.org/2.0/)
 
-1. Install all dependencies via [Bower](https://bower.io/) in the __controller-app__ directory:
+1. *Install all dependencies*
+
+Use [bower](https://bower.io/) in the __controller-app__ directory:
 
 ```
     bower install
@@ -53,7 +55,7 @@ Finally the least exciting design became the winner:
 
 _Note: By design this app runs locally on ESP8266. That's why the WebSocket connection url listens on host=**window.location.hostname** by default. For testing purposes simply change the url to any other WebSocket server location._
 
-3. Minify & bundle & zip app
+3. *Minify & bundle & zip app*
 
 [polymer-bundler](https://github.com/Polymer/polymer-bundler) does this job well:
 
@@ -61,7 +63,7 @@ _Note: By design this app runs locally on ESP8266. That's why the WebSocket conn
   polymer-bundler index.html --inline-scripts --inline-css --strip-comments > ../Esp8266/data/www/index.build.html && gzip ../Esp8266/data/www/index.build.html
 ```
 
-4. Compile & upload C++ code to ESP8266
+4. *Compile & upload C++ code to ESP8266*
 
 Load sketch __ESP8266.ino__ from __ESP8266__ folder in [Arduino IDE](https://www.arduino.cc/en/main/software).
 
@@ -87,7 +89,7 @@ ls | xargs -I{} git -C {} pull
 
 With all dependencies provided the code should compile and is ready for upload.
 
-5. Upload app to ESP8266
+5. *Upload app to ESP8266*
 
 Finally upload app from __ESP8266/data/www__ folder to your ESP8266. Go to Arduino IDE __Tools > [ESP8266 Sketch Data Upload](https://github.com/esp8266/arduino-esp8266fs-plugin)__
 
