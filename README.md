@@ -21,7 +21,7 @@ _TODO_
 
 ## Controller in Html5 & Css3
 
-Various controller versions with the idea of using motion control of my smartphone to control the vehicle:
+I tried various controller versions with the idea of using motion control of my smartphone to control the vehicle:
 
    * [JSFiddle - First version inspired by Android Remote Controller](https://jsfiddle.net/hunsalz/eg8L16uk/)
 
