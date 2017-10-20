@@ -4,6 +4,7 @@ Control your LEGO Technic 42065 RC Tracked Racer via web application instead of 
 
 ## Open issues
 
+* Automate polymer build with gulp or [other](https://gulpjs.com/) toolings
 * Enable TLS for ESP8266 to provide https
 * Enable Service Worker to Polymer app (depends on https)
 * Build an [Apache Cordova](https://cordova.apache.org/) app from WebApp
@@ -62,8 +63,13 @@ _Note: By design this app runs locally on ESP8266. That's why the WebSocket conn
 ```
   polymer-bundler index.html --inline-scripts --inline-css --strip-comments > ../Esp8266/data/www/index.build.html && gzip ../Esp8266/data/www/index.build.html
 ```
+4. *Upload app to ESP8266*
 
-4. *Compile & upload C++ code to ESP8266*
+Finally upload app from __ESP8266/data/www__ folder to your ESP8266. Go to Arduino IDE __Tools > [ESP8266 Sketch Data Upload](https://github.com/esp8266/arduino-esp8266fs-plugin)__
+
+*Note*: Close _Serial Monitor_ of Arduino IDE before uploading data. Otherwise upload will interrupt.
+
+### *Compile & upload C++ code to ESP8266*
 
 Load sketch __ESP8266.ino__ from __ESP8266__ folder in [Arduino IDE](https://www.arduino.cc/en/main/software).
 
@@ -88,13 +94,3 @@ ls | xargs -I{} git -C {} pull
 ```
 
 With all dependencies provided the code should compile and is ready for upload.
-
-5. *Upload app to ESP8266*
-
-Finally upload app from __ESP8266/data/www__ folder to your ESP8266. Go to Arduino IDE __Tools > [ESP8266 Sketch Data Upload](https://github.com/esp8266/arduino-esp8266fs-plugin)__
-
-*Note*: Close _Serial Monitor_ of Arduino IDE before uploading data. Otherwise upload will interrupt.
-
-6. Testing
-
-_TODO_
