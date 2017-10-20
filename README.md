@@ -11,7 +11,7 @@ Control your LEGO Technic 42065 RC Tracked Racer via web application instead of 
 ## Hardware listing
 
 * [42065 RC Tracked Racer](https://www.lego.com/en-us/technic/products/rc-tracked-racer-42065)
-* Amica NodeMCU ESP8266 - *Important note: Not all ESP8266 development boards are compatible with the offered motor shields. Especially the sizing of the LoLin NodeMCU V3 doesn't match.*
+* Amica NodeMCU ESP8266 - *Important note: Not all ESP8266 development boards are compatible with the offered motor shields. Especially the sizing of the LoLin NodeMCU V3 doesn't fit together.*
 * ESP8266 NodeMcu V2 Motor Shield Board
 * a bunch of wires
 
@@ -23,17 +23,17 @@ _TODO_
 
 Various controller versions with the idea of using motion control of my smartphone to control the vehicle:
 
-[JSFiddle - First version inspired by Android Remote Controller](https://jsfiddle.net/hunsalz/eg8L16uk/)
+   * [JSFiddle - First version inspired by Android Remote Controller](https://jsfiddle.net/hunsalz/eg8L16uk/)
 
-[JSFiddle - Adapted second version](https://jsfiddle.net/hunsalz/xh6ny11p/)
+   * [JSFiddle - Adapted second version](https://jsfiddle.net/hunsalz/xh6ny11p/)
 
-Technically motion control works perfectly. - But unfortunately it was very unhandy for controlling the vehicle. 
+Technically motion control works perfectly. - But unfortunately it was very unhandy for controlling the vehicle.
 
 Finally the least exciting design became the winner:
 
 ![controller](https://user-images.githubusercontent.com/16960855/30988069-68acddb8-a499-11e7-84b7-44836a44ae3a.png)
 
-[JSFiddle - Latest JSFiddle Version](https://jsfiddle.net/hunsalz/1tgfpvgL/)
+   * [JSFiddle - Latest JSFiddle Version](https://jsfiddle.net/hunsalz/1tgfpvgL/)
 
 ## Build and run
 
@@ -53,12 +53,12 @@ Finally the least exciting design became the winner:
 
 _Note: By design this app runs locally on ESP8266. That's why the WebSocket connection url listens on host=**window.location.hostname** by default. For testing purposes simply change the url to any other WebSocket server location._
 
-3. Minify & bundle app
+3. Minify & bundle & zip app
 
 [polymer-bundler](https://github.com/Polymer/polymer-bundler) does this job well:
 
 ```
-  polymer-bundler index.html --inline-scripts --inline-css --strip-comments > ../Esp8266/data/www/index.build.html
+  polymer-bundler index.html --inline-scripts --inline-css --strip-comments > ../Esp8266/data/www/index.build.html && gzip ../Esp8266/data/www/index.build.html
 ```
 
 4. Compile & upload C++ code to ESP8266
@@ -67,7 +67,7 @@ Load sketch __ESP8266.ino__ from __ESP8266__ folder in [Arduino IDE](https://www
 
 Verify dependencies:
 
-* Update __Additional boards Manager URLs__ in your Arduino IDE preferences page with [Arduino core for ESP8266 WiFi chip](https://github.com/esp8266/Arduino). Current version depends on: https://github.com/esp8266/Arduino/releases/download/2.4.0-rc1/package_esp8266com_index.json
+* Update __Additional boards Manager URLs__ in your Arduino IDE preferences page with [Arduino core for ESP8266 WiFi chip](https://github.com/esp8266/Arduino). Current version depends on: https://github.com/esp8266/Arduino/releases/download/2.4.0-rc2/package_esp8266com_index.json
 
 Additional includes:
 
@@ -89,7 +89,7 @@ With all dependencies provided the code should compile and is ready for upload.
 
 5. Upload app to ESP8266
 
-Finally upload app from __ESP8266/data/www__ folder to your ESP8266. Go to Arduino IDE __Tools > ESP8266 Sketch Data Upload__
+Finally upload app from __ESP8266/data/www__ folder to your ESP8266. Go to Arduino IDE __Tools > [ESP8266 Sketch Data Upload](https://github.com/esp8266/arduino-esp8266fs-plugin)__
 
 *Note*: Close _Serial Monitor_ of Arduino IDE before uploading data. Otherwise upload will interrupt.
 
