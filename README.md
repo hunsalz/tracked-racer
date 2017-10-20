@@ -4,7 +4,7 @@ Control your LEGO Technic 42065 RC Tracked Racer via web application instead of 
 
 ## Open issues
 
-* Automate polymer build with gulp or [other](https://gulpjs.com/) toolings
+* Automate polymer build with [gulp](https://gulpjs.com/) or other toolings
 * Enable TLS for ESP8266 to provide https
 * Enable Service Worker to Polymer app (depends on https)
 * Build an [Apache Cordova](https://cordova.apache.org/) app from WebApp
