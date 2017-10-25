@@ -18,7 +18,7 @@ Control your LEGO Technic 42065 RC Tracked Racer via web application instead of 
 
 ## Pictures of hardware assembling
 
-[LEGO Technic 42065 chassis](https://user-images.githubusercontent.com/16960855/31990202-b3c58120-b974-11e7-9a83-be3f9cbbaa06.jpg)
+![LEGO Technic 42065 chassis](https://user-images.githubusercontent.com/16960855/31990202-b3c58120-b974-11e7-9a83-be3f9cbbaa06.jpg)
 
 ## Controller in Html5 & Css3
 
