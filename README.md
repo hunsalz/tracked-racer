@@ -22,7 +22,7 @@ Plain LEGO Technic 42065 chassis:
 
 ![LEGO Technic 42065 chassis](https://user-images.githubusercontent.com/16960855/31990202-b3c58120-b974-11e7-9a83-be3f9cbbaa06.jpg)
 
-Assembled ESP8266 + Motorshield + LEGO motors & battery pack:
+Assembled ESP8266 + Motorshield + LEGO parts:
 
 ![Assembled ESP8266 + Motorshield + LEGO motors & battery pack](https://user-images.githubusercontent.com/16960855/31990417-5f07fff4-b975-11e7-85a2-bf42f36d5443.jpg)
 
