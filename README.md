@@ -18,10 +18,19 @@ Control your LEGO Technic 42065 RC Tracked Racer via web application instead of 
 
 ## Pictures of hardware assembling
 
+Plain LEGO Technic 42065 chassis:
+
 ![LEGO Technic 42065 chassis](https://user-images.githubusercontent.com/16960855/31990202-b3c58120-b974-11e7-9a83-be3f9cbbaa06.jpg)
 
-![Assembled ESP8266 + Motorshield + Lego motors & battery pack](https://user-images.githubusercontent.com/16960855/31990417-5f07fff4-b975-11e7-85a2-bf42f36d5443.jpg)
+Assembled ESP8266 + Motorshield + LEGO motors & battery pack:
 
+![Assembled ESP8266 + Motorshield + LEGO motors & battery pack](https://user-images.githubusercontent.com/16960855/31990417-5f07fff4-b975-11e7-85a2-bf42f36d5443.jpg)
+
+Details of ESP8266 + Motorshield + LEGO parts:
+
+![Details of ESP8266 + Motorshield + LEGO parts](https://user-images.githubusercontent.com/16960855/31990570-c7881758-b975-11e7-878a-a9024992d66d.jpg)
+
+TODO further details
 
 ## Controller in Html5 & Css3
 
