@@ -14,6 +14,7 @@ Control your LEGO Technic 42065 RC Tracked Racer via web application instead of 
 * [42065 RC Tracked Racer](https://www.lego.com/en-us/technic/products/rc-tracked-racer-42065)
 * Amica NodeMCU ESP8266 - *Important note: Not all ESP8266 development boards are compatible with the offered motor shields. Especially the sizing of the LoLin NodeMCU V3 doesn't fit together.*
 * ESP8266 NodeMcu V2 Motor Shield Board
+* an elastic band to tie up NodeMcu and MotorShield the easy way with LEGO bricks
 * a bunch of wires
 
 ## Pictures of hardware assembling
