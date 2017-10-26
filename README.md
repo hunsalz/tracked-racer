@@ -1,6 +1,6 @@
-# Smart LEGO Tracked Racer
+# Smart LEGO® Tracked Racer
 
-Control your LEGO Technic 42065 RC Tracked Racer via web application instead of using included RC.
+Control your LEGO® Technic 42065 RC Tracked Racer via web application instead of using included RC.
 
 ## Open issues
 
@@ -12,24 +12,27 @@ Control your LEGO Technic 42065 RC Tracked Racer via web application instead of 
 ## Hardware listing
 
 * [42065 RC Tracked Racer](https://www.lego.com/en-us/technic/products/rc-tracked-racer-42065)
+* A LEGO® Power Functions extension wire [8886]
 * Amica NodeMCU ESP8266 - *Important note: Not all ESP8266 development boards are compatible with the offered motor shields. Especially the sizing of the LoLin NodeMCU V3 doesn't fit together.*
 * ESP8266 NodeMcu V2 Motor Shield Board
-* an elastic band to tie up NodeMcu and MotorShield the easy way with LEGO bricks
-* a bunch of wires
+* An elastic band to tie up NodeMCU and MotorShield the easy way with LEGO® bricks
+* A bunch of wires
 
 ## Pictures of hardware assembling
 
-Plain LEGO Technic 42065 chassis:
+Plain LEGO® Technic 42065 chassis:
 
-![LEGO Technic 42065 chassis](https://user-images.githubusercontent.com/16960855/31990202-b3c58120-b974-11e7-9a83-be3f9cbbaa06.jpg)
+![LEGO® Technic 42065 chassis](https://user-images.githubusercontent.com/16960855/31990202-b3c58120-b974-11e7-9a83-be3f9cbbaa06.jpg)
 
-Assembled ESP8266 + Motorshield + LEGO parts:
+Assembled ESP8266 + Motorshield + LEGO® parts:
 
-![Assembled ESP8266 + Motorshield + LEGO motors & battery pack](https://user-images.githubusercontent.com/16960855/31990417-5f07fff4-b975-11e7-85a2-bf42f36d5443.jpg)
+![Assembled ESP8266 + Motorshield + LEGO® motors & battery pack](https://user-images.githubusercontent.com/16960855/31990417-5f07fff4-b975-11e7-85a2-bf42f36d5443.jpg)
 
-Details of ESP8266 + Motorshield + LEGO parts:
+Details of ESP8266 + Motorshield + LEGO® parts:
 
-![Details of ESP8266 + Motorshield + LEGO parts](https://user-images.githubusercontent.com/16960855/31990570-c7881758-b975-11e7-878a-a9024992d66d.jpg)
+![Details of ESP8266 + Motorshield + LEGO® parts](https://user-images.githubusercontent.com/16960855/31990570-c7881758-b975-11e7-878a-a9024992d66d.jpg)
+
+You find further details of wiring LEGO® Power Functions for example [here](https://scuttlebots.com/2014/03/02/lego-pf-hacking-wiring/).
 
 TODO further details
 
