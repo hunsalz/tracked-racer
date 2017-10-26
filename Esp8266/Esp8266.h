@@ -3,17 +3,18 @@
 #include <Arduino.h>
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
-#include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
 
+#include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
 #include <EspService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/EspService.h
 #include <FSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/FSService.h
-#include <MDNSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MDNSService.h
-#include <MotorDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/MotorShieldDriver
 #include <Service.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/Service.h
-#include <WebService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebService
-#include <WebSocketListener.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebSocketListener
-#include <WiFiAPService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiAPService
-#include <WiFiService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WiFiService
+#include <WebService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebService.h
+#include <WebSocketListener.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebSocketListener.h
+
+#include <actuator/MotorDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/actuator/MotorShieldDriver.h
+#include <network/MDNSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/network/MDNSService.h
+#include <network/WiFiAPService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/network/WiFiAPService.h
+#include <network/WiFiService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/network/WiFiService.h
 
 class Esp8266 : public esp8266util::Service {
 
@@ -47,11 +48,11 @@ class Esp8266 : public esp8266util::Service {
 		unsigned long previousTime = millis();
 
     // const definitions
-    
+
 		const uint16_t UPDATE_INTERVAL = 5000;
 
     const uint8_t PWM_RANGE = 25;
-    
+
     // pin definition for motor shield
     const uint8_t MOTOR_A_PWM = 5; // D1
     const uint8_t MOTOR_A_DIR = 0; // D3
@@ -59,10 +60,10 @@ class Esp8266 : public esp8266util::Service {
     const uint8_t MOTOR_B_DIR = 2; // D4
 
     // wiFi settings
-    const char* WIFI_SSID_1 = "Sputnik";
-    const char* WIFI_PASSWD_1 = "!--Sputnik--!";
-    const char* WIFI_SSID_2 = "visitors";
-    const char* WIFI_PASSWD_2 = "kA!3MD.kE-92BVtx";
+    const char* WIFI_SSID_1 = "***";
+    const char* WIFI_PASSWD_1 = "***";
+    const char* WIFI_SSID_2 = "***";
+    const char* WIFI_PASSWD_2 = "***";
 
     const char* WIFI_AP_SSID = "MyESP8266";
     const char* WIFI_AP_PASSWD = "password";

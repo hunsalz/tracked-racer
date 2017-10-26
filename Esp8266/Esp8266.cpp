@@ -13,7 +13,7 @@ bool Esp8266::isRunning() {
 }
 
 bool Esp8266::start() {
-  
+
   if (!isRunning()) {
     Log.verbose(F("Setup ESP8266 ..." CR));
 
@@ -42,12 +42,12 @@ bool Esp8266::start() {
     fsService.start();
 
     // setup WebServer
-    
+
     // rewrite root context
     webService.getWebServer()->rewrite("/", "/index.build.html");
     // handle static web resources
-    webService.getWebServer()->serveStatic("/", SPIFFS, "/www/", "max-age:600"); // cache-control 600 seconds 
-    
+    webService.getWebServer()->serveStatic("/", SPIFFS, "/www/", "max-age:600"); // cache-control 600 seconds
+
     // add dynamic http resources
     webService.on("/esp", HTTP_GET, [this](AsyncWebServerRequest *request) {
       webService.send(request, espService.getDetails());
@@ -77,7 +77,7 @@ bool Esp8266::start() {
     wsl.onTextMessage([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
       DynamicJsonBuffer buffer;
-      JsonVariant variant = buffer.parse((char*)data);   
+      JsonVariant variant = buffer.parse((char*)data);
       if (variant.is<JsonObject&>()) {
 
         // process JSON instructions
@@ -85,7 +85,7 @@ bool Esp8266::start() {
         int speedA = atoi(json["motorA"]);
         int speedB = atoi(json["motorB"]);
         const char* mode = json["mode"];
-      
+
         Log.verbose(F("Set motor A = %d and motor B = %d, PWM range = %d" CR), speedA, speedB, motorA.getPWMRange());
 
         // decide which mode to use
@@ -108,7 +108,7 @@ bool Esp8266::start() {
         uint16_t length = message.measureLength() + 1;
         char payload[length];
         message.printTo(payload, length);
-        client->text(payload);            
+        client->text(payload);
       } else {
         client->text(F("Unexpected message"));
       }
@@ -136,7 +136,10 @@ bool Esp8266::stop() {
 
   if (isRunning()) {
     webService.stop();
-    fsService.stop();
+    fsService.start();
+    espService.start();
+    mdnsService.stop();
+    wiFiAPService.stop();
     wiFiService.stop();
 
     running = false;
