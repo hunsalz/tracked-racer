@@ -4,7 +4,7 @@
 
 //#define DISABLE_LOGGING // uncomment to compile without any log events
 
-Esp8266 *esp8266;
+Esp8266* esp8266;
 
 void setup() {
 
@@ -13,12 +13,19 @@ void setup() {
   while(!Serial && !Serial.available()) {}
 
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
-  Log.verbose(F("" CR));
+
+  Log.setPrefix([](Print* prefix) {
+    prefix->print(F("[ESP8266] "));
+  });
+  
+  Log.verbose(F("\nSerial baud rate is [%d]" CR), Serial.baudRate());
   
   esp8266 = new Esp8266();
-  esp8266->start();
+  esp8266->begin();
 }
 
 void loop() {
-	esp8266->run();
+  esp8266->run();
+  // time for RTOS functions
+  delay(20);
 }

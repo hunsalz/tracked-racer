@@ -1,10 +1,9 @@
 #pragma once
 
-#include <Arduino.h>
+#include <Arduino.h> // https://github.com/esp8266/Arduino/tree/master/cores/esp8266
 #include <ArduinoJson.h> // https://github.com/bblanchon/ArduinoJson
 #include <ArduinoLog.h> // https://github.com/thijse/Arduino-Log
 
-#include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h
 #include <EspService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/EspService.h
 #include <FSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/FSService.h
 #include <Service.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/Service.h
@@ -12,44 +11,40 @@
 #include <WebSocketListener.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/WebSocketListener.h
 
 #include <actuator/MotorDriver.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/actuator/MotorShieldDriver.h
+#include <logging/LogService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/logging/LogService.h
 #include <network/MDNSService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/network/MDNSService.h
 #include <network/WiFiAPService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/network/WiFiAPService.h
 #include <network/WiFiService.h> // https://github.com/hunsalz/esp8266utils/blob/master/src/network/WiFiService.h
 
-class Esp8266 : public esp8266util::Service {
+using esp8266util::MotorDriver;
+using esp8266util::FILESYSTEM;
+using esp8266util::MDNS_SERVICE;
+using esp8266util::SERVER;
+using esp8266util::SYSTEM;
+using esp8266util::WIFI_CLIENT;
+using esp8266util::WIFI_STATION;
+
+class Esp8266 {
 
 	public:
 
-    Esp8266();
-    ~Esp8266();
-
-    bool isRunning();
-
-    bool start();
-
-    bool stop();
+    void begin();
 
 		void run();
 
-	private:
+	private: 
 
     esp8266util::MotorDriver motorA;
     esp8266util::MotorDriver motorB;
-    esp8266util::EspService espService;
-    esp8266util::FSService fsService;
-    esp8266util::MDNSService mdnsService;
-    esp8266util::WiFiAPService wiFiAPService;
-    esp8266util::WiFiService wiFiService;
-    esp8266util::WebService webService;
+
+    esp8266util::LogService logService;
     esp8266util::WebSocketListener wsl;
-
-    bool running = false;
-
+     
 		unsigned long previousTime = millis();
 
     // const definitions
 
-		const uint16_t UPDATE_INTERVAL = 5000;
+		const static uint16_t UPDATE_INTERVAL = 5000;
 
     const uint8_t PWM_RANGE = 25;
 
@@ -67,4 +62,7 @@ class Esp8266 : public esp8266util::Service {
 
     const char* WIFI_AP_SSID = "MyESP8266";
     const char* WIFI_AP_PASSWD = "password";
+
+    // web server settings
+    const static int PORT = 80;
 };
