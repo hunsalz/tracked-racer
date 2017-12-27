@@ -2,13 +2,11 @@
 
 void Esp8266::begin() {
 
-  Log.verbose(F("Setup ESP8266 ..." CR));
-
+  LOG.verbose(F("Setup ESP8266 ..."));
   // setup hardware components
-  motorA.setup(MOTOR_A_PWM, MOTOR_A_DIR),
-  motorB.setup(MOTOR_B_PWM, MOTOR_B_DIR),
+  motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR),
+  motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR),
   MotorDriver::setPWMRange(PWM_RANGE);
-
   // setup WiFi client
   WIFI_CLIENT.getWiFiMulti().addAP(WIFI_SSID_1, WIFI_PASSWD_1);
   WIFI_CLIENT.getWiFiMulti().addAP(WIFI_SSID_2, WIFI_PASSWD_2);
@@ -49,8 +47,7 @@ void Esp8266::begin() {
   });
   SERVER.on("/motor/b", HTTP_GET, [this](AsyncWebServerRequest *request) {
     SERVER.send(request, motorB.getDetails());
-  });
-  
+  }); 
   // add web socket support
   wsl.onTextMessage([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
@@ -65,7 +62,7 @@ void Esp8266::begin() {
       //int speedB = atoi(json["motorB"]);
       const char* mode = json["mode"];
 
-      Log.verbose(F("Set motor A = %d and motor B = %d, PWM range = %d" CR), speedA, speedB, motorA.getPWMRange());
+      LOG.verbose(F("Set motor A = %d and motor B = %d, PWM range = %d"), speedA, speedB, motorA.getPWMRange());
 
       // decide which mode to use
       if (strcmp("absolute", mode) == 0) {
@@ -92,24 +89,22 @@ void Esp8266::begin() {
       client->text(F("Received an unexpected message."));
     }
   });
-  // add WebSocket
+  // add web socket
   AsyncWebSocket* webSocket = new AsyncWebSocket("/racer");
   webSocket->onEvent([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
     wsl.onEvent(ws, client, type, arg, data, len);
   });
   SERVER.getWebServer().addHandler(webSocket);
-
-  Log.verbose(F("=========================" CR));
-  Log.verbose(F("Setup finished. Have fun." CR));
-  Log.verbose(F("=========================" CR));
+  
+  LOG.verbose(F("========================="));
+  LOG.verbose(F("Setup finished. Have fun."));
+  LOG.verbose(F("========================="));
 }
 
 void Esp8266::run() {
 
-  if ((previousTime + UPDATE_INTERVAL) < millis()) {
-    previousTime = millis();
+  if (SYSTEM.nextLoopInterval()) {
 
     MDNS_SERVICE.getMDNSResponder().update();
   }
 }
-
