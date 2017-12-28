@@ -17,6 +17,7 @@ void Esp8266::begin() {
   MDNS_SERVICE.begin("esp8266");
   MDNS_SERVICE.getMDNSResponder().addService("http", "tcp", PORT);
   //MDNS_SERVICE.getMDNSResponder().addService("https", "tcp", 443);
+  FILESYSTEM.getFileSystem();
   // setup web server
   SERVER.begin(PORT);
   // rewrite root context˘˘
