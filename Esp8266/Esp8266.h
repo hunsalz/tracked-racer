@@ -25,10 +25,10 @@ class Esp8266 {
 
     private: 
 
-    esp8266util::MotorDriver motorA;
-    esp8266util::MotorDriver motorB;
+    esp8266util::MotorDriver _motorA;
+    esp8266util::MotorDriver _motorB;
 
-    esp8266util::WebSocketListener wsl;
+    esp8266util::WebSocketListener _wsl;
     
     const uint8_t PWM_RANGE = 25;
 
@@ -39,10 +39,11 @@ class Esp8266 {
     const uint8_t MOTOR_B_DIR = 2; // D4
 
     // wiFi settings
-    const char* WIFI_SSID_1 = "xxx";
-    const char* WIFI_PASSWD_1 = "xxx";
-    const char* WIFI_SSID_2 = "xxx";
-    const char* WIFI_PASSWD_2 = "xxx";
+
+    // const char* WIFI_SSID_1 = "xxx";
+    // const char* WIFI_PASSWD_1 = "xxx";
+    // const char* WIFI_SSID_2 = "xxx";
+    // const char* WIFI_PASSWD_2 = "xxx";
 
     const char* WIFI_AP_SSID = "MyESP8266";
     const char* WIFI_AP_PASSWD = "password";

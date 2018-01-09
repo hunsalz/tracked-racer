@@ -4,8 +4,8 @@ void Esp8266::begin() {
 
   LOG.verbose(F("Setup ESP8266 ..."));
   // setup hardware components
-  motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR),
-  motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR),
+  _motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR),
+  _motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR),
   MotorDriver::setPWMRange(PWM_RANGE);
   // setup WiFi client
   WIFI_CLIENT.getWiFiMulti().addAP(WIFI_SSID_1, WIFI_PASSWD_1);
@@ -44,13 +44,13 @@ void Esp8266::begin() {
     SERVER.send(request, MDNS_SERVICE.getDetails());
   });
   SERVER.on("/motor/a", HTTP_GET, [this](AsyncWebServerRequest *request) {
-    SERVER.send(request, motorA.getDetails());
+    SERVER.send(request, _motorA.getDetails());
   });
   SERVER.on("/motor/b", HTTP_GET, [this](AsyncWebServerRequest *request) {
-    SERVER.send(request, motorB.getDetails());
+    SERVER.send(request, _motorB.getDetails());
   }); 
   // add web socket support
-  wsl.onTextMessage([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
+  _wsl.onTextMessage([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
     DynamicJsonBuffer buffer;
     JsonObject &json = buffer.parse((char*)data);
@@ -63,23 +63,23 @@ void Esp8266::begin() {
       //int speedB = atoi(json["motorB"]);
       const char* mode = json["mode"];
 
-      LOG.verbose(F("Set motor A = %d and motor B = %d, PWM range = %d"), speedA, speedB, motorA.getPWMRange());
+      LOG.verbose(F("Set motor A = %d and motor B = %d, PWM range = %d"), speedA, speedB, _motorA.getPWMRange());
 
       // decide which mode to use
       if (strcmp("absolute", mode) == 0) {
-        motorA.setSpeed(speedA);
-        motorB.setSpeed(speedB);
+        _motorA.setSpeed(speedA);
+        _motorB.setSpeed(speedB);
       } else {
-        motorA.applySpeed(speedA);
-        motorB.applySpeed(speedB);
+        _motorA.applySpeed(speedA);
+        _motorB.applySpeed(speedB);
       }
 
       // create JSON reply message
       DynamicJsonBuffer buffer;
       JsonObject& message = buffer.createObject();
       message["clientId"] = client->id();
-      message["motorA"] = motorA.getSpeed();
-      message["motorB"] = motorB.getSpeed();
+      message["motorA"] = _motorA.getSpeed();
+      message["motorB"] = _motorB.getSpeed();
 
       // send reply message
       uint16_t length = message.measureLength() + 1;
@@ -93,7 +93,7 @@ void Esp8266::begin() {
   // add web socket
   AsyncWebSocket* webSocket = new AsyncWebSocket("/racer");
   webSocket->onEvent([this](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
-    wsl.onEvent(ws, client, type, arg, data, len);
+    _wsl.onEvent(ws, client, type, arg, data, len);
   });
   SERVER.getWebServer().addHandler(webSocket);
   
