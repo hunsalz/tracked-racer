@@ -136,12 +136,8 @@
         <div class="value">[[_getPercent(motorB)]]%</div>
       </div>
     </div>
-    <web-socket id="ws"
-                auto
-                url="[[url]]"
-                state="{{state}}"
-                verbose>
-    <web-socket>
+    <web-socket id="ws" auto url="[[url]]" state="{{state}}" verbose>
+      <web-socket>
   </template>
 
   <script>
@@ -188,7 +184,7 @@
       }
 
       _changed() {
-        this.$.ws.send({motorA: this.motorA, motorB: this.motorB, mode: 'absolute'});
+        this.$.ws.send({ motorA: this.motorA, motorB: this.motorB, mode: 'absolute' });
       }
 
       _handleWSStateChanges() {

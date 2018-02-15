@@ -6,10 +6,10 @@
     "iron-input": "PolymerElements/iron-input#latest",
     "iron-icons": "PolymerElements/iron-icons#latest",
     "paper-styles": "PolymerElements/paper-styles#latest",
-    "web-socket": "hunsalz/web-socket"
+    "web-socket": "hunsalz/web-socket#latest"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#latest"
   }
 }

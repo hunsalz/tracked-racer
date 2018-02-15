@@ -1,7 +1,19 @@
 {
+  "entrypoint": "index.html",
+  "shell": "src/tracked-racer-app/tracked-racer-app.html",
+  "sources": [
+   "src/**/*",
+   "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/webcomponents-lite.js"
+  ],
   "lint": {
-    "rules": [
-      "polymer-2"
-    ]
-  }
+    "rules": ["polymer-2"]
+  },
+  "builds": [
+    { "preset": "es5-bundled" },
+    { "preset": "es6-unbundled" }
+  ]
 }
