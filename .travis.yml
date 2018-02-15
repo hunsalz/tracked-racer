@@ -11,9 +11,10 @@ cache:
     - node_modules
 install:
   - npm install -g polymer-cli
-  - npm install
+  - npm install -g polymer-bundler
 script:
   - cd tracked-racer-app/
   - polymer install -v
-  - cd ..
+  - polymer-bundler index.html --inline-scripts --inline-css --strip-comments > ../Esp8266/data/www/index.build.html && gzip ../Esp8266/data/www/index.build.html
 deploy:
+  skip_cleanup: true
