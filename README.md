@@ -1,5 +1,8 @@
 # Smart LEGO® Tracked Racer
 
+[![Build Status](https://travis-ci.org/hunsalz/tracked-racer.svg?branch=master)](https://travis-ci.org/hunsalz/weather-station)
+[![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](http://doge.mit-license.org)
+
 Control your LEGO® Technic 42065 RC Tracked Racer via web application instead of using included RC.
 
 ## Open issues
