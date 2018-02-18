@@ -1,5 +1,5 @@
-#include <Esp8266Utils.h>     // https://github.com/hunsalz/esp8266utils
-#include <Log4Esp.h>          // https://github.com/hunsalz/log4Esp
+#include <Esp8266Utils.h>  // https://github.com/hunsalz/esp8266utils
+#include <Log4Esp.h>       // https://github.com/hunsalz/log4Esp
 
 #include "config.h"
 
@@ -43,8 +43,8 @@ void setup() {
 
   // setup hardware components
   _motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR),
-  _motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR),
-  esp8266util::MotorDriver::setPWMRange(PWM_RANGE);
+      _motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR),
+      esp8266util::MotorDriver::setPWMRange(PWM_RANGE);
 
   // WiFi setup
   WIFI_STA_CFG.addAP(WIFI_SSID_1, WIFI_PSK_1);
@@ -83,6 +83,9 @@ void setup() {
   SERVER.on("/ap", HTTP_GET, [](AsyncWebServerRequest *request) {
     SERVER.send(request, WIFI_AP_CFG.getDetails());
   });
+  SERVER.on("/esp", HTTP_GET, [](AsyncWebServerRequest *request) {
+    SERVER.send(request, SYS_CFG.getDetails());
+  });
   SERVER.on("/motor/a", HTTP_GET, [](AsyncWebServerRequest *request) {
     SERVER.send(request, _motorA.getDetails());
   });
@@ -93,13 +96,13 @@ void setup() {
   _wsl.onTextMessage([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
     DynamicJsonBuffer buffer;
-    JsonObject &json = buffer.parse((char*)data);
-    if (json.success() && json["motorA"].success() && json["motorB"].success() && json["mode"].success()) {
+    JsonObject &json = buffer.parse((char *)data);
 
+    if (json.success() && json["motorA"].success() && json["motorB"].success() && json["mode"].success()) {
       int speedA = json["motorA"];
       int speedB = json["motorB"];
-      
-      const char* mode = json["mode"];
+
+      const char *mode = json["mode"];
 
       LOG.verbose(F("Set motor A = %d and motor B = %d, PWM range = %d"), speedA, speedB, _motorA.getPWMRange());
 
@@ -114,7 +117,7 @@ void setup() {
 
       // create JSON reply message
       DynamicJsonBuffer buffer;
-      JsonObject& message = buffer.createObject();
+      JsonObject &message = buffer.createObject();
       message["clientId"] = client->id();
       message["motorA"] = _motorA.getSpeed();
       message["motorB"] = _motorB.getSpeed();
@@ -129,8 +132,8 @@ void setup() {
     }
   });
   // add web socket
-  AsyncWebSocket* webSocket = new AsyncWebSocket("/racer");
-  webSocket->onEvent([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
+  AsyncWebSocket *webSocket = new AsyncWebSocket("/racer");
+  webSocket->onEvent([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) { 
     _wsl.onEvent(ws, client, type, arg, data, len);
   });
   SERVER.getWebServer().addHandler(webSocket);
@@ -141,7 +144,6 @@ void setup() {
 }
 
 void loop() {
-  
   if (SYS_CFG.nextLoopInterval()) {
     MDNS.update();
   }
