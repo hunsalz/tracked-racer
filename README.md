@@ -90,7 +90,7 @@ Verify dependencies:
 * [#include <Esp8266Utils.h>](https://github.com/hunsalz/esp8266utils)
 * [#include <Log4Esp.h>](https://github.com/hunsalz/log4Esp)
 
-You can manage your additional includes by Arduino IDE __Sketch > Include Library > Manage Libraries...__ or better by __git clone__ in your __library__ folder of your Arduino sketchbook location.
+You can manage your additional includes by Arduino IDE __Sketch > Include Library > Manage Libraries__ or you checkout dependencies yourself by __git clone__ in your __library__ folder of your Arduino sketchbook location.
 
 Using git allows you to easily update all libraries at once:
 
