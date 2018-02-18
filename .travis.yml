@@ -16,3 +16,11 @@ script:
   - cd tracked-racer-app/
   - polymer install -v
   - polymer-bundler index.html --inline-scripts --inline-css --strip-comments > ../Esp8266/data/www/index.build.html && gzip ../Esp8266/data/www/index.build.html
+deploy:
+  provider: pages
+  github-token: $GH_PAGES_TOKEN
+  skip-cleanup: true
+  keep-history: true
+  verbose: true
+  on:
+    branch: master
