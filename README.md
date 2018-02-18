@@ -5,12 +5,6 @@
 
 Control your LEGO® Technic 42065 RC Tracked Racer via web application instead of using included RC.
 
-## Open issues
-
-* Enable TLS for ESP8266 to provide https
-* Enable Service Worker to Polymer app (depends on https)
-* Build an [Apache Cordova](https://cordova.apache.org/) app from WebApp
-
 ## Hardware listing
 
 * [42065 RC Tracked Racer](https://www.lego.com/en-us/technic/products/rc-tracked-racer-42065)
@@ -40,15 +34,15 @@ TODO further details
 
 ## Controller in Html5 & Css3
 
-I tried various controller versions with the idea of using motion control of my smartphone to control the vehicle:
+I tried various controller versions with the idea of using motion control abilities of my smartphone to control the vehicle:
 
    * [JSFiddle - First version inspired by Android Remote Controller](https://jsfiddle.net/hunsalz/eg8L16uk/)
 
    * [JSFiddle - Adapted second version](https://jsfiddle.net/hunsalz/xh6ny11p/)
 
-Technically motion control works perfectly. - But unfortunately it was very unhandy for controlling the vehicle.
+Technically motion control works perfectly. - But in practise it was very unhandy for controlling the vehicle.
 
-Finally the least exciting design became the winner:
+Finally the winner looks like:
 
 ![controller](https://user-images.githubusercontent.com/16960855/30988069-68acddb8-a499-11e7-84b7-44836a44ae3a.png)
 
@@ -93,14 +87,8 @@ Load sketch __ESP8266.ino__ from __ESP8266__ folder in [Arduino IDE](https://www
 
 Verify dependencies:
 
-* Update __Additional boards Manager URLs__ in your Arduino IDE preferences page with [Arduino core for ESP8266 WiFi chip](https://github.com/esp8266/Arduino). Current version depends on: https://github.com/esp8266/Arduino/releases/download/2.4.0-rc2/package_esp8266com_index.json
-
-Additional includes:
-
-* [#include <ArduinoLog.h>](https://github.com/thijse/Arduino-Log)
-* [#include <ArduinoJson.h>](https://github.com/bblanchon/ArduinoJson)
-* [#include <ESPAsyncTCP.h>](https://github.com/me-no-dev/ESPAsyncTCP/blob/master/src/ESPAsyncTCP.h)
-* [#include <ESPAsyncWebServer.h>](https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/src/ESPAsyncWebServer.h)
+* [#include <Esp8266Utils.h>](https://github.com/hunsalz/esp8266utils)
+* [#include <Log4Esp.h>](https://github.com/hunsalz/log4Esp)
 
 You can manage your additional includes by Arduino IDE __Sketch > Include Library > Manage Libraries...__ or better by __git clone__ in your __library__ folder of your Arduino sketchbook location.
 
