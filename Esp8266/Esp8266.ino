@@ -72,25 +72,25 @@ void setup() {
   // cache-control 15 seconds
   // add dynamic http resources
   SERVER.on("/fs", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, FILESYSTEM.getStorageDetails());
+    SERVER.send(request, "text/json", FILESYSTEM.getStorageDetails());
   });
   SERVER.on("/files", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, FILESYSTEM.getFileListing());
+    SERVER.send(request, "text/json", FILESYSTEM.getFileListing());
   });
   SERVER.on("/sta", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, WIFI_STA_CFG.getDetails());
+    SERVER.send(request, "text/json", WIFI_STA_CFG.getDetails());
   });
   SERVER.on("/ap", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, WIFI_AP_CFG.getDetails());
+    SERVER.send(request, "text/json", WIFI_AP_CFG.getDetails());
   });
   SERVER.on("/esp", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, SYS_CFG.getDetails());
+    SERVER.send(request, "text/json", SYS_CFG.getDetails());
   });
-  SERVER.on("/motor/a", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, _motorA.getDetails());
+  SERVER.on("/motor_a", HTTP_GET, [](AsyncWebServerRequest *request) {
+    SERVER.send(request, "text/json", _motorA.getDetails());
   });
-  SERVER.on("/motor/b", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, _motorB.getDetails());
+  SERVER.on("/motor_b", HTTP_GET, [](AsyncWebServerRequest *request) {
+    SERVER.send(request, "text/json", _motorB.getDetails());
   });
   // add web socket support
   _wsl.onTextMessage([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
