@@ -6,10 +6,10 @@
 // web server settings
 const static int PORT = 80;
 
-esp8266util::MotorDriver _motorA;
-esp8266util::MotorDriver _motorB;
+esp8266utils::MotorDriver _motorA;
+esp8266utils::MotorDriver _motorB;
 
-esp8266util::WebSocketListener _wsl;
+esp8266utils::WebSocketListener _wsl;
 
 void setup() {
   // logger setup
@@ -44,7 +44,7 @@ void setup() {
   // setup hardware components
   _motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR),
       _motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR),
-      esp8266util::MotorDriver::setPWMRange(PWM_RANGE);
+      esp8266utils::MotorDriver::setPWMRange(PWM_RANGE);
 
   // WiFi setup
   WIFI_STA_CFG.addAP(WIFI_SSID_1, WIFI_PSK_1);
@@ -72,25 +72,25 @@ void setup() {
   // cache-control 15 seconds
   // add dynamic http resources
   SERVER.on("/fs", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, "text/json", FILESYSTEM.getStorageDetails());
+    SERVER.send(request, esp8266utils::TEXT_JSON, FILESYSTEM.getStorageDetails());
   });
   SERVER.on("/files", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, "text/json", FILESYSTEM.getFileListing());
+    SERVER.send(request, esp8266utils::TEXT_JSON, FILESYSTEM.getFileListing());
   });
   SERVER.on("/sta", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, "text/json", WIFI_STA_CFG.getDetails());
+    SERVER.send(request, esp8266utils::TEXT_JSON, WIFI_STA_CFG.getDetails());
   });
   SERVER.on("/ap", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, "text/json", WIFI_AP_CFG.getDetails());
+    SERVER.send(request, esp8266utils::TEXT_JSON, WIFI_AP_CFG.getDetails());
   });
   SERVER.on("/esp", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, "text/json", SYS_CFG.getDetails());
+    SERVER.send(request, esp8266utils::TEXT_JSON, SYS_CFG.getDetails());
   });
   SERVER.on("/motor_a", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, "text/json", _motorA.getDetails());
+    SERVER.send(request, esp8266utils::TEXT_JSON, _motorA.getDetails());
   });
   SERVER.on("/motor_b", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, "text/json", _motorB.getDetails());
+    SERVER.send(request, esp8266utils::TEXT_JSON, _motorB.getDetails());
   });
   // add web socket support
   _wsl.onTextMessage([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
