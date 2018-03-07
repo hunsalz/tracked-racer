@@ -72,25 +72,25 @@ void setup() {
   // cache-control 15 seconds
   // add dynamic http resources
   SERVER.on("/fs", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, esp8266utils::TEXT_JSON, FILESYSTEM.getStorageDetails());
+    SERVER.send(request, esp8266utils::APP_JSON, FILESYSTEM.getStorageDetails());
   });
   SERVER.on("/files", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, esp8266utils::TEXT_JSON, FILESYSTEM.getFileListing());
+    SERVER.send(request, esp8266utils::APP_JSON, FILESYSTEM.getFileListing());
   });
   SERVER.on("/sta", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, esp8266utils::TEXT_JSON, WIFI_STA_CFG.getDetails());
+    SERVER.send(request, esp8266utils::APP_JSON, WIFI_STA_CFG.getDetails());
   });
   SERVER.on("/ap", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, esp8266utils::TEXT_JSON, WIFI_AP_CFG.getDetails());
+    SERVER.send(request, esp8266utils::APP_JSON, WIFI_AP_CFG.getDetails());
   });
   SERVER.on("/esp", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, esp8266utils::TEXT_JSON, SYS_CFG.getDetails());
+    SERVER.send(request, esp8266utils::APP_JSON, SYS_CFG.getDetails());
   });
   SERVER.on("/motor_a", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, esp8266utils::TEXT_JSON, _motorA.getDetails());
+    SERVER.send(request, esp8266utils::APP_JSON, _motorA.getDetails());
   });
   SERVER.on("/motor_b", HTTP_GET, [](AsyncWebServerRequest *request) {
-    SERVER.send(request, esp8266utils::TEXT_JSON, _motorB.getDetails());
+    SERVER.send(request, esp8266utils::APP_JSON, _motorB.getDetails());
   });
   // add web socket support
   _wsl.onTextMessage([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
@@ -144,7 +144,12 @@ void setup() {
 }
 
 void loop() {
+  
+  ESP.wdtDisable();
   if (SYS_CFG.nextLoopInterval()) {
     MDNS.update();
   }
+  ESP.wdtEnable(30000);
+  // reserve time for core processes
+  delay(500);
 }
