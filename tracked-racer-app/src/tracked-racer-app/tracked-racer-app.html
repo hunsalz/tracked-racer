@@ -127,17 +127,16 @@
 
     <div class="container">
       <div class="control">
-        <div class="value">[[_getPercent(motorA)]]%</div>
+        <div class="value">[[__getPercent(motorA)]]%</div>
         <input type="range" value="{{motorA::input}}" min="-[[range]]" max="[[range]]" step="[[step]]"></input>
         <div class="middle">
           <iron-icon icon="icons:settings-remote"></iron-icon>
         </div>
         <input type="range" value="{{motorB::input}}" min="-[[range]]" max="[[range]]" step="[[step]]"></input>
-        <div class="value">[[_getPercent(motorB)]]%</div>
+        <div class="value">[[__getPercent(motorB)]]%</div>
       </div>
     </div>
-    <web-socket id="ws" auto url="[[url]]" state="{{state}}" verbose>
-      <web-socket>
+    <web-socket id="ws" auto url="[[url]]" state="{{state}}" verbose></web-socket>
   </template>
 
   <script>
@@ -157,7 +156,7 @@
           },
           state: {
             type: Number,
-            observer: '_handleWSStateChanges',
+            observer: '__handleWSStateChanges',
             notify: true
           },
           range: {
@@ -172,22 +171,22 @@
             type: Number,
             value: 0,
             notify: true,
-            observer: '_changed'
+            observer: '__changed'
           },
           motorB: {
             type: Number,
             value: 0,
             notify: true,
-            observer: '_changed'
+            observer: '__changed'
           }
         };
       }
 
-      _changed() {
+      __changed() {
         this.$.ws.send({ motorA: this.motorA, motorB: this.motorB, mode: 'absolute' });
       }
 
-      _handleWSStateChanges() {
+      __handleWSStateChanges() {
 
         var _color = 'var(--paper-orange-700)';
         switch (this.state) {
@@ -205,7 +204,7 @@
         });
       }
 
-      _getPercent(value) {
+      __getPercent(value) {
         return 100 / this.range * value;
       }
     }
