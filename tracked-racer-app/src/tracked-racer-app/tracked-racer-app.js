@@ -4,6 +4,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-input/iron-input.js';
 
 import '@polymer/paper-styles/paper-styles.js';
+import '@polymer/paper-toast/paper-toast.js';
 
 import '@hunsalz/web-socket/web-socket.js';
 
@@ -123,6 +124,11 @@ class TrackedRacerApp extends PolymerElement {
         input[type=range]:focus::-moz-range-track {
           background: #ccc;
         }
+
+        paper-toast {
+          width: 100%;
+          text-align: center;
+        }
       </style>
       
       <!-- service components -->
@@ -131,8 +137,6 @@ class TrackedRacerApp extends PolymerElement {
 
       <!-- UI components -->
       
-      <h1>HALLO</h1>
-
       <div class="container">
         <div class="control">
           <div class="value">[[__getPercent(motorA)]]%</div>
@@ -144,6 +148,8 @@ class TrackedRacerApp extends PolymerElement {
           <div class="value">[[__getPercent(motorB)]]%</div>
         </div>
       </div>
+
+      <paper-toast id="toast" vertical-align="top" text="Connected with [[url]]" opened></paper-toast>
     `;
   }
   static get properties() {
