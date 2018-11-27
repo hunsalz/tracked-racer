@@ -12,9 +12,8 @@ node_js:
 cache:
   directories:
     - node_modules
-install:
-  - npm install -g polymer-cli
 script:
+  - npm install -g polymer-cli
   - polymer install
   - polymer build
   - mv build/public .
