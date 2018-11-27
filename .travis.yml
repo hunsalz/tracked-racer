@@ -1,18 +1,30 @@
 language: node_js
+node_js:
+  - "10"
 dist: trusty
 sudo: required
 addons:
-  firefox: "latest"
+  firefox: latest
+  chrome: stable
 node_js:
   - "node"
-  - "9"
+  - "stable"
 cache:
   directories:
     - node_modules
 install:
   - npm install -g polymer-cli
-  - npm install -g polymer-bundler
 script:
-  - cd tracked-racer-app/
-  - polymer install -v
-  - polymer-bundler index.html --inline-scripts --inline-css --strip-comments > ../Esp8266/data/www/index.build.html && gzip ../Esp8266/data/www/index.build.html
+  - polymer install
+  - polymer build
+  - mv build/public .
+  - echo "<META http-equiv="refresh" content=\"0;URL=public/src/tracked-racer-app/\">" >index.html
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GH_PAGES_TOKEN
+  keep-history: true
+  local-dir: .
+  verbose: true
+  on:
+    branch: master
