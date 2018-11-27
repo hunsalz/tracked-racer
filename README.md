@@ -3,12 +3,14 @@
 [![Build Status](https://travis-ci.org/hunsalz/tracked-racer.svg?branch=master)](https://travis-ci.org/hunsalz/weather-station)
 [![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](http://doge.mit-license.org)
 
+## Watch [Tracked-Racer-App ↗](https://hunsalz.github.io/tracked-racer/) live.
+
 Control your LEGO® Technic 42065 RC Tracked Racer with your Smartphone instead of using the included RC.
 
 ## Features
 
-* Use a [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_applications) as controller. Add it to your homescreen.
-* Use Web standard communiction with [WebSockets](https://developer.mozilla.org/de/docs/WebSockets)
+* Use a [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_applications) as controller. Add it without further installation to your homescreen.
+* Use Web standard communication with [WebSockets](https://developer.mozilla.org/de/docs/WebSockets)
 * Use cheap hardware components
 
 ## Hardware listing
@@ -82,7 +84,7 @@ _Note: By design this app runs locally on ESP8266 and depends on a WebSocket ser
 $ polymer build
 ```
 
-4. *Upload app to ESP8266*
+4. Upload app to ESP8266
 
 Finally upload app from __ESP8266/data/www__ folder to your ESP8266. Go to Arduino IDE __Tools > [ESP8266 Sketch Data Upload](https://github.com/esp8266/arduino-esp8266fs-plugin)__
 
@@ -106,3 +108,5 @@ ls | xargs -I{} git -C {} pull
 ```
 
 With all dependencies provided the code should compile and is ready for upload.
+
+5. Browse to http://esp8266.local/ to load the app.
