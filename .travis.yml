@@ -18,8 +18,8 @@ script:
   - cd tracked-racer-app
   - polymer install
   - polymer build
-  - mv build/public .
-  - echo "<META http-equiv="refresh" content=\"0;URL=tracked-racer-app/public/src/tracked-racer-app/\">" > ../index.html
+  - cd ..
+  - echo "<META http-equiv="refresh" content=\"0;URL=tracked-racer-app/build/public/\">" > index.html
 deploy:
   provider: pages
   skip-cleanup: true
