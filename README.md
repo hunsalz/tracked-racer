@@ -64,11 +64,11 @@ $ polymer install
 
 2. Test app locally in your browser. 
 
-````
+```
 $ polymer serve --open
 ```
 
-_Note: By design this app runs locally on ESP8266. That's why the WebSocket connection url listens on host=**window.location.hostname** by default. For testing purposes simply change the url to any other WebSocket server location._
+_Note: By design this app runs locally on ESP8266 and depends on a WebSocket served by the WebServer of the ESP. For production adjust the WS endpoint._
 
 3. Prepare for production
 
