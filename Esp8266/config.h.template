@@ -1,0 +1,16 @@
+// WiFi settings
+const char *WIFI_SSID_1 = "YOUR SSID";
+const char *WIFI_PSK_1 = "YOUR PRE SHARED KEY";
+const char *WIFI_SSID_2 = "YOUR SSID";
+const char *WIFI_PSK_2 = "YOUR PRE SHARED KEY";
+
+const char *WIFI_AP_SSID = "YOUR SSID";
+const char *WIFI_AP_PSK = "YOUR PRE SHARED KEY";
+
+// pin definition for motor shield
+const uint8_t MOTOR_A_PWM = 5;  // D1
+const uint8_t MOTOR_A_DIR = 0;  // D3
+const uint8_t MOTOR_B_PWM = 4;  // D2
+const uint8_t MOTOR_B_DIR = 2;  // D4
+
+const uint8_t PWM_RANGE = 25;
