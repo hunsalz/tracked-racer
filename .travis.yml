@@ -12,8 +12,10 @@ node_js:
 cache:
   directories:
     - node_modules
-script:
+install:
   - npm install -g polymer-cli
+script:
+  - cd tracked-racer-app
   - polymer install
   - polymer build
   - mv build/public .
