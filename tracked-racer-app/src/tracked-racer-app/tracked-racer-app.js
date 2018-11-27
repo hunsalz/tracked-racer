@@ -218,7 +218,8 @@ class TrackedRacerApp extends PolymerElement {
       console.warn(hostname + " is defined as dev environment. Use " + wsUrlDev + " as mock service.");
       return wsUrlDev;
     } else {
-      return "ws://" + window.location.hostname + ":8000/racer"; // URL must match with device preferences
+      return "wss://echo.websocket.org/"; // URL must match with device preferences
+      //return "ws://" + window.location.hostname + ":8000/racer"; // URL must match with device preferences
     }
   }
 }
