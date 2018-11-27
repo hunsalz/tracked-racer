@@ -1,6 +1,11 @@
 {
   "name": "tracked-racer-app",
   "description": "Tracked Racer App",
+  "version": "1.0.0",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/hunsalz/tracked-racer"
+  },
   "dependencies": {
     "@polymer/polymer": "^3.1.0",
     "@polymer/iron-input": "^3.0.1",

@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/hunsalz/tracked-racer.svg?branch=master)](https://travis-ci.org/hunsalz/weather-station)
 [![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](http://doge.mit-license.org)
 
-Control your LEGO® Technic 42065 RC Tracked Racer via web application instead of using included RC.
+Control your LEGO® Technic 42065 RC Tracked Racer via a [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_applications) instead of using the included RC.
 
 ## Hardware listing
 
@@ -42,7 +42,7 @@ I tried various controller versions with the idea of using motion control abilit
 
 Technically motion control works perfectly. - But in practise it was very unhandy for controlling the vehicle.
 
-Finally the winner looks like:
+Finally the winner looks plain simpler:
 
 ![controller](https://user-images.githubusercontent.com/16960855/30988069-68acddb8-a499-11e7-84b7-44836a44ae3a.png)
 
@@ -50,31 +50,32 @@ Finally the winner looks like:
 
 ## Build and run
 
-### Build Web-App with [Polymer 2.0](https://www.polymer-project.org/2.0/)
+### Build Web-App with [Polymer 3.0](https://polymer-library.polymer-project.org/3.0/docs/devguide/feature-overview)
 
-1. *Install all dependencies*
+*Prerequisition: [Polymer CLI](https://www.npmjs.com/package/polymer-cli)*
 
-Use [bower](https://bower.io/) in the __controller-app__ directory:
+1. Install all dependencies
 
-```
-    bower install
-```
-
-2. Test app locally in your browser via the Polymer development server part of [Polymer CLI](https://www.npmjs.com/package/polymer-cli). Start typing from the __controller-app__ directory:
+Go to folder *tracked-racer-app*:
 
 ```
-    polymer serve --open
+$ polymer install
+```
+
+2. Test app locally in your browser. 
+
+````
+$ polymer serve --open
 ```
 
 _Note: By design this app runs locally on ESP8266. That's why the WebSocket connection url listens on host=**window.location.hostname** by default. For testing purposes simply change the url to any other WebSocket server location._
 
-3. *Minify & bundle & zip app*
-
-[polymer-bundler](https://github.com/Polymer/polymer-bundler) does this job well:
+3. Prepare for production
 
 ```
-  polymer-bundler index.html --inline-scripts --inline-css --strip-comments > ../Esp8266/data/www/index.build.html && gzip ../Esp8266/data/www/index.build.html
+$ polymer build
 ```
+
 4. *Upload app to ESP8266*
 
 Finally upload app from __ESP8266/data/www__ folder to your ESP8266. Go to Arduino IDE __Tools > [ESP8266 Sketch Data Upload](https://github.com/esp8266/arduino-esp8266fs-plugin)__
