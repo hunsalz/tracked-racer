@@ -209,6 +209,9 @@ class TrackedRacerApp extends PolymerElement {
 
   __computeWSUrl() {
 
+    console.log(window.location.hostname);
+    console.log("hostname.endsWith(github.io)", hostname.endsWith("github.io"));
+
     let hostname = window.location.hostname;
     if (hostname === "127.0.0.1" || hostname.endsWith("github.io")) {
       let wsUrlDev = "wss://echo.websocket.org/";
