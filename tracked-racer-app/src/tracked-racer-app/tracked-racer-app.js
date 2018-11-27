@@ -209,17 +209,13 @@ class TrackedRacerApp extends PolymerElement {
 
   __computeWSUrl() {
 
-    var wsUrlDev = "wss://echo.websocket.org/";
-
-    switch(window.location.hostname) {
-      case "127.0.0.1":
-        console.warn(window.location.hostname + " is defined as dev location. Use WebSocket server: " + wsUrlDev + " for dev mode.");
-        return wsUrlDev;
-      case "github.io":
-        console.warn(window.location.hostname + " is defined as dev location. Use WebSocket server: " + wsUrlDev + " for dev mode.");
-        return wsUrlDev;
-      default:
-        return "ws://" + window.location.hostname + ":8000/racer"; // URL must match with device preferences
+    let hostname = window.location.hostname;
+    if (hostname === "127.0.0.1" || hostname.endsWith("github.io")) {
+      let wsUrlDev = "wss://echo.websocket.org/";
+      console.warn(hostname + " is defined as dev environment. Use " + wsUrlDev + " as mock service.");
+      return wsUrlDev;
+    } else {
+      return "ws://" + window.location.hostname + ":8000/racer"; // URL must match with device preferences
     }
   }
 }
