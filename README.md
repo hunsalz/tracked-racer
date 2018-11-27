@@ -3,7 +3,13 @@
 [![Build Status](https://travis-ci.org/hunsalz/tracked-racer.svg?branch=master)](https://travis-ci.org/hunsalz/weather-station)
 [![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](http://doge.mit-license.org)
 
-Control your LEGO® Technic 42065 RC Tracked Racer via a [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_applications) instead of using the included RC.
+Control your LEGO® Technic 42065 RC Tracked Racer with your Smartphone instead of using the included RC.
+
+## Features
+
+* Use a [Progressive Web App](https://en.wikipedia.org/wiki/Progressive_web_applications) as controller. Add it to your homescreen.
+* Use Web standard communiction with [WebSockets](https://developer.mozilla.org/de/docs/WebSockets)
+* Use cheap hardware components
 
 ## Hardware listing
 
