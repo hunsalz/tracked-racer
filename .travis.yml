@@ -16,7 +16,7 @@ install:
   - npm install -g polymer-cli
 script:
   - cd tracked-racer-app
-  - polymer install
+  - npm install
   - polymer build
   - cd ..
   - echo "<META http-equiv="refresh" content=\"0;URL=tracked-racer-app/build/public/\">" > index.html

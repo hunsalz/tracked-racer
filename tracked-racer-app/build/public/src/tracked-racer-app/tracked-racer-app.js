@@ -1496,7 +1496,7 @@ and this string can then be deleted`;function elementIsScrollLocked(element){var
       
       <!-- service components -->
 
-      <web-socket id="ws" auto url="[[url]]" state="{{state}}" verbose></web-socket>
+      <web-socket id="ws" url="[[url]]" state="{{state}}"></web-socket>
 
       <!-- UI components -->
       

@@ -1,6 +1,7 @@
 {
-  "name": "A controller app for LEGO Technic 42065 RC Tracked Racer",
-  "short_name": "LEGO Racer",
+  "name": "Tracked Racer App",
+  "short_name": "Racer App",
+  "description": "A controller app for LEGO Technic 42065 RC Tracked Racer",
   "start_url": "/",
   "display": "fullscreen",
   "orientation": "landscape",
