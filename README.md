@@ -62,9 +62,7 @@ Finally the winner looks plain simpler:
 
 *Prerequisition: [Polymer CLI](https://www.npmjs.com/package/polymer-cli)*
 
-1. Install all dependencies
-
-Go to folder *tracked-racer-app*:
+1. Install all dependencies - Go to folder *tracked-racer-app*:
 
 ```
 $ polymer install
