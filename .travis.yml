@@ -20,6 +20,8 @@ install:
 script:
   - cd tracked-racer-app
   - npm install
+  - sed -i -e 's|src="src=src|src="tracked-racer/src|g' index.html # expand path to match GH-PAGES root dir
+  - sed -i 's|service-worker.js|tracked-racer/service-worker.js|g' index.html # expand path to match GH-PAGES root dir
   - polymer build
 deploy:
   provider: pages
