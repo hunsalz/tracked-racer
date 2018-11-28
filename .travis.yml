@@ -22,7 +22,7 @@ script:
   - npm install
   - polymer build
   - cd ..
-  - mv build/public tracked-racer
+  - mv build/public build/tracked-racer
   - echo "<META http-equiv="refresh" content=\"0;URL=tracked-racer/\">" > index.html
 deploy:
   provider: pages
