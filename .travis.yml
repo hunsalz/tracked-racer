@@ -10,7 +10,7 @@ node_js:
   - "node"
   - "stable"
 stages:
-- test
+- deploy
 - ':deploy it to GH-PAGES'
 cache:
   directories:
@@ -23,7 +23,6 @@ script:
   - polymer build
   - cd ..
   - echo "<META http-equiv="refresh" content=\"0;URL=tracked-racer-app/build/public/\">" > index.html
-  - ll
 deploy:
   provider: pages
   skip-cleanup: true
