@@ -9,6 +9,9 @@ addons:
 node_js:
   - "node"
   - "stable"
+stages:
+  - deploy
+    name: "Deploy to GH-PAGES"
 cache:
   directories:
     - node_modules
@@ -25,7 +28,7 @@ deploy:
   skip-cleanup: true
   github-token: $GH_PAGES_TOKEN
   keep-history: true
-  local-dir: .
+  local-dir: tracked-racer-app/build
   verbose: true
   on:
     branch: master
