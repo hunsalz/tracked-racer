@@ -21,14 +21,12 @@ script:
   - cd tracked-racer-app
   - npm install
   - polymer build
-  - mv build/public build/tracked-racer
-  - echo "<META http-equiv="refresh" content=\"0;URL=tracked-racer/\">" > build/index.html
 deploy:
   provider: pages
   skip-cleanup: true
   github-token: $GH_PAGES_TOKEN
   keep-history: true
-  local-dir: tracked-racer-app/build
+  local-dir: tracked-racer-app/build/public
   verbose: true
   on:
     branch: master
