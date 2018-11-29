@@ -149,7 +149,7 @@ class TrackedRacerApp extends PolymerElement {
         </div>
       </div>
 
-      <paper-toast id="toast" vertical-align="top" text="Connected with [[url]]" opened></paper-toast>
+      <paper-toast id="toast" vertical-align="top" text="[[__message(state)]]" duration="6000"></paper-toast>
     `;
   }
   static get properties() {
@@ -211,6 +211,25 @@ class TrackedRacerApp extends PolymerElement {
 
   __getPercent(value) {
     return 100 / this.range * value;
+  }
+
+  __message(state) {
+
+    this.$.toast.open();
+    switch (this.state) {
+      case 0:
+        return "Connecting with " + this.url;
+      case 1:
+        return "Connected with " + this.url;
+      case 2:
+        return "Closing connection with " + this.url;
+      case 3:
+        return "Connection with " + this.url + " closed";
+      default:
+        // shouldn't be called ever
+        this.$.toast.close();
+        return "";
+    }
   }
 
   __computeWSUrl() {
