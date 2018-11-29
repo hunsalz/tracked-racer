@@ -149,7 +149,7 @@ class TrackedRacerApp extends PolymerElement {
         </div>
       </div>
 
-      <paper-toast id="toast" vertical-align="top" text="[[__message(state)]]" duration="6000"></paper-toast>
+      <paper-toast id="toast" vertical-align="top" text="[[__showWSMessage(state)]]" duration="6000"></paper-toast>
     `;
   }
   static get properties() {
@@ -213,10 +213,16 @@ class TrackedRacerApp extends PolymerElement {
     return 100 / this.range * value;
   }
 
-  __message(state) {
+  /**
+   * Show a human readable WS state message
+   * @param {*} state 
+   */
+  __showWSMessage(state) {
 
     this.$.toast.open();
     switch (this.state) {
+      case -1:
+        return "No response from " + this.url;
       case 0:
         return "Connecting with " + this.url;
       case 1:
