@@ -8,7 +8,7 @@ import '@polymer/paper-toast/paper-toast.js';
 
 import '@hunsalz/web-socket/web-socket.js';
 
-class TrackedRacerApp extends PolymerElement {
+class RacerApp extends PolymerElement {
   static get template() {
     return html`
       <style>
@@ -242,17 +242,15 @@ class TrackedRacerApp extends PolymerElement {
 
     console.log(window.location.hostname);
     console.log("hostname.endsWith(github.io)", window.location.hostname.endsWith("github.io"));
-
     let hostname = window.location.hostname;
     if (hostname === "127.0.0.1" || hostname.endsWith("github.io")) {
       let wsUrlDev = "wss://echo.websocket.org/";
       console.warn(hostname + " is defined as dev environment. Use " + wsUrlDev + " as mock service.");
       return wsUrlDev;
     } else {
-      return "wss://echo.websocket.org/"; // URL must match with device preferences
-      //return "ws://" + window.location.hostname + ":8000/racer"; // URL must match with device preferences
+      return "ws://" + window.location.hostname + "/racer"; // URL must match with device preferences
     }
   }
 }
 
-window.customElements.define('tracked-racer-app', TrackedRacerApp);
+window.customElements.define('racer-app', RacerApp);

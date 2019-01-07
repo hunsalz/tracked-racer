@@ -1,6 +1,6 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/tracked-racer-app/tracked-racer-app.js",
+  "shell": "src/racer-app.js",
   "sources": [
     "fonts/**/*",
     "images/**/*",
