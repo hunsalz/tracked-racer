@@ -37,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["index.html","73e87579c1614f4461a41d1bc3460ea7"],["src/tracked-racer-app/tracked-racer-app.js","60d64edd35db84a7f3325fbf597d25b7"]];
+var precacheConfig = [["index.html","da4371ed7e8c774093d950360c28b92b"],["src/racer-app.js","7795609381ea9cacc5dccb6407e745a9"]];
 var cacheName = 'sw-precache-v3--' + (self.registration ? self.registration.scope : '');
 
 
