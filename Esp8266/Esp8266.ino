@@ -132,47 +132,36 @@ void setup() {
     snprintf(payload, len + 1, (char*)data);
     VERBOSE_FP(F("Payload of request is: %s"), payload);
 
-    client->text("DONE");
-    return;
-
     // try to parse payload as JSON
-    DynamicJsonDocument doc;
-    DeserializationError err = deserializeJson(doc, payload);
+    DynamicJsonDocument docRequest;
+    DeserializationError err = deserializeJson(docRequest, payload);
     if (err) {
       VERBOSE_F("Reading request failed: %s", err.c_str());
       client->text(F("Received an unexpected message."));
     } else {
-//      JsonObject request = doc.as<JsonObject>();
-//      int speedA = request["motorA"];
-//      int speedB = request["motorB"];
-//      char* mode = request["mode"];
-//      // decide which process mode to use
-//      if (strcmp("absolute", mode) == 0) {
-//        _motorA.setSpeed(speedA);
-//        _motorB.setSpeed(speedB);
-//      } else {
-//        _motorA.applySpeed(speedA);
-//        _motorB.applySpeed(speedB);
-//      }
-
-      
+      // map JSON request
+      JsonObject request = docRequest.as<JsonObject>();
+      int speedA = request["motorA"];
+      int speedB = request["motorB"];
+      const char* mode = request["mode"];
+      // decide which process mode to use
+      if (strcmp("absolute", mode) == 0) {
+        _motorA.setSpeed(speedA);
+        _motorB.setSpeed(speedB);
+      } else {
+        _motorA.applySpeed(speedA);
+        _motorB.applySpeed(speedB);
+      }
       // create JSON response
-//      DynamicJsonDocument doc2;
-//      JsonObject response = doc2.to<JsonObject>();
-//      response["clientId"] = client->id();
-//      response["motorA"] = _motorA.getSpeed();
-//      response["motorB"] = _motorB.getSpeed();
-
-//      StreamString* payload = new StreamString();
-//      serializeJson(response, payload);
-//      size_t size = measureJson(response);
-      //client->text(*payload);
-
-//      // send reply message
-//      uint16_t length = message.measureLength() + 1;
-//      char payload[length];
-//      message.printTo(payload, length);
-//      client->text(payload);
+      DynamicJsonDocument docResponse;
+      JsonObject response = docResponse.to<JsonObject>();
+      response["clientId"] = client->id();
+      response["motorA"] = _motorA.getSpeed();
+      response["motorB"] = _motorB.getSpeed();
+      // send response message
+      StreamString* msg = new StreamString();
+      serializeJson(response, *msg);
+      client->text(*msg);
     }
   });
   // add web socket
