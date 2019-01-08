@@ -1,5 +1,4 @@
 #include <ESP8266mDNS.h>        // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/src/ESP8266mDNS.h
-#include <ESP8266WiFiMulti.h>   // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.h
 #include <StreamString.h>       // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/StreamString.h
 
 #include <Esp8266Utils.h>       // https://github.com/hunsalz/esp8266utils
@@ -22,16 +21,11 @@ void setup() {
   // setup hardware components
   _motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR);
   _motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR);
-  //esp8266utils::setPWMRange(PWM_RANGE);
+  // setup PWM range once
+  _motorA.setPWMRange(PWM_RANGE);
 
   // WiFi AP setup
   esp8266utils::setupWiFiAp(WIFI_AP_SSID, WIFI_AP_PSK);
-
-//  // WiFi station setup
-//  ESP8266WiFiMulti wifiMulti;
-//  wifiMulti.addAP(WIFI_SSID_1, WIFI_PSK_1);
-//  wifiMulti.addAP(WIFI_SSID_2, WIFI_PSK_2);
-//  esp8266utils::setupWiFiSta(wifiMulti);
 
   // MDNS setup
   const char* hostname = "esp8266";
@@ -83,15 +77,6 @@ void setup() {
     request->send(response);
     delete payload;
   });
-//  webService.on("/sta", HTTP_GET, [](AsyncWebServerRequest* request) {
-//
-//    AsyncResponseStream *response = request->beginResponseStream("application/json");  
-//    StreamString* payload = new StreamString();
-//    size_t size = esp8266utils::serializeWiFiSta(*payload);
-//    response->print(*payload); 
-//    request->send(response);
-//    delete payload;
-//  });
   webService.on("/esp", HTTP_GET, [](AsyncWebServerRequest* request) {
     
     AsyncResponseStream *response = request->beginResponseStream("application/json");  
