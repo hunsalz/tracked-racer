@@ -5,27 +5,29 @@
 
 #include "config.h"
 
-esp8266utils::MotorDriver _motorA;
-esp8266utils::MotorDriver _motorB;
+using namespace esp8266utils;
 
-esp8266utils::WebSocketListener _wsl;
+MotorDriver _motorA;
+MotorDriver _motorB;
+
+WebSocketListener _wsl;
 
 unsigned long nextLoopInterval = 0;
 
 void setup() {
   
   // init Serial with desired baud rate
-  esp8266utils::Logging::init(115200);
+  Logging::init(115200);
   VERBOSE_FP(F("Serial baud rate is [%lu]"), Serial.baudRate());
 
   // setup hardware components
-  _motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR);
-  _motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR);
+  _motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR, MOTOR_PWM_RANGE);
+  _motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR, MOTOR_PWM_RANGE);
   // setup PWM range once
-  _motorA.setPWMRange(PWM_RANGE);
+  MotorDriver::applyPWMRange(MOTOR_PWM_RANGE);
 
   // WiFi AP setup
-  esp8266utils::setupWiFiAp(WIFI_AP_SSID, WIFI_AP_PSK);
+  setupWiFiAp(WIFI_AP_SSID, WIFI_AP_PSK);
 
   // MDNS setup
   const char* hostname = "esp8266";
@@ -38,11 +40,11 @@ void setup() {
   }
 
   // file system setup to enable static web server content
-  esp8266utils::FileSystem fs; 
+  FileSystem fs; 
   fs.begin();
 
   // general web server setup
-  esp8266utils::WebService webService(80);
+  WebService webService(80);
   webService.begin();
   // rewrite root context
   webService.getWebServer().rewrite("/", "/index.html");
@@ -72,7 +74,7 @@ void setup() {
 
     AsyncResponseStream *response = request->beginResponseStream("application/json");  
     StreamString* payload = new StreamString();
-    size_t size = esp8266utils::serializeWiFiAp(*payload);
+    size_t size = serializeWiFiAp(*payload);
     response->print(*payload); 
     request->send(response);
     delete payload;
@@ -81,7 +83,7 @@ void setup() {
     
     AsyncResponseStream *response = request->beginResponseStream("application/json");  
     StreamString* payload = new StreamString();
-    size_t size = esp8266utils::serializeESP(*payload);
+    size_t size = serializeESP(*payload);
     response->print(*payload); 
     request->send(response);
     VERBOSE(*payload);
