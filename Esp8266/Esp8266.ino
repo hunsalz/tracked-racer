@@ -10,7 +10,8 @@ using namespace esp8266utils;
 MotorDriver _motorA;
 MotorDriver _motorB;
 
-WebSocketListener _wsl;
+ESPAsyncWebService webService(80);
+ESPAsyncWebSocketListener _wsl;
 
 unsigned long nextLoopInterval = 0;
 
@@ -44,7 +45,6 @@ void setup() {
   fs.begin();
 
   // general web server setup
-  WebService webService(80);
   webService.begin();
   // rewrite root context
   webService.getWebServer().rewrite("/", "/index.html");
