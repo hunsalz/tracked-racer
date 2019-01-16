@@ -240,15 +240,13 @@ class RacerApp extends PolymerElement {
 
   __computeWSUrl() {
 
-    console.log(window.location.hostname);
-    console.log("hostname.endsWith(github.io)", window.location.hostname.endsWith("github.io"));
     let hostname = window.location.hostname;
     if (hostname === "127.0.0.1" || hostname.endsWith("github.io")) {
       let wsUrlDev = "wss://echo.websocket.org/";
       console.warn(hostname + " is defined as dev environment. Use " + wsUrlDev + " as mock service.");
       return wsUrlDev;
     } else {
-      return "ws://" + window.location.hostname + "/racer"; // URL must match with device preferences
+      return "ws://" + window.location.hostname + "/ws"; // URL must match with device preferences
     }
   }
 }
