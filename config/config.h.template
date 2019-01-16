@@ -11,3 +11,6 @@ const uint8_t MOTOR_B_PWM = 4;  // D2
 const uint8_t MOTOR_B_DIR = 2;  // D4
 
 const uint8_t MOTOR_PWM_RANGE = 25;
+
+// define loop interval in milli seconds
+static const uint16_t LOOP_INTERVAL = 15 * 1000; // 15s
