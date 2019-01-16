@@ -5,6 +5,7 @@
 #include <Esp8266Utils.h>       // https://github.com/hunsalz/esp8266utils
 
 #include "config.h"
+#include "html.h"
 
 using namespace esp8266utils;
 
@@ -46,13 +47,6 @@ void setup() {
   FileSystem fs; 
   fs.begin();
 
-  // general web server setup
-  
-  // rewrite root context
-  //server.rewrite("/", "/index.html");
-  // handle static web resources
-  //server.serveStatic("/", SPIFFS, "/www/", "max-age:15");
-
   // add dynamic http resources
   server.on("/fs", HTTP_GET, [&fs]() {
   
@@ -91,16 +85,45 @@ void setup() {
     server.send(200, APPLICATION_JSON, *payload); 
   });
 
-  // add static http resources
+  // add static ws test resource
   server.on("/", []() {
     server.send_P(200, TEXT_HTML, WS_TEST_HTML);
   });
 
-  // define specific ws listener handlers
+  // define specific ws listener handler
   webSocketsServerListener.onTextMessage([](uint8_t num, WStype_t type, uint8_t *payload, size_t length) {
-    VERBOSE_FP(F("Payload is %s"), payload);
 
-    webSocketsServer.sendTXT(num, "{'message': 'ok'}");
+    VERBOSE_F("PAYLOAD %s", payload);
+    // try to parse payload as json
+    DynamicJsonDocument docRequest;
+    DeserializationError err = deserializeJson(docRequest, payload);
+    if (err) {
+      VERBOSE_F("Reading request failed: %s", err.c_str());
+      webSocketsServer.sendTXT(num, "Received an unexpected message.");
+    } else {
+      // map json request
+      JsonObject request = docRequest.as<JsonObject>();
+      int speedA = request["motorA"];
+      int speedB = request["motorB"];
+      const char* mode = request["mode"];
+      // decide which process mode to use
+      if (strcmp("absolute", mode) == 0) {
+        motorA.setSpeed(speedA);
+        motorB.setSpeed(speedB);
+      } else {
+        motorA.applySpeed(speedA);
+        motorB.applySpeed(speedB);
+      }
+      // create json response
+      DynamicJsonDocument docResponse;
+      JsonObject response = docResponse.to<JsonObject>();
+      response["motorA"] = motorA.getSpeed();
+      response["motorB"] = motorB.getSpeed();
+      // send response message
+      StreamString* msg = new StreamString();
+      serializeJson(response, *msg);
+      webSocketsServer.sendTXT(num, *msg);
+    }
   });
 
   // register ws listener
@@ -126,7 +149,9 @@ void loop() {
     nextLoopInterval = millis() + 15000;
     
     MDNS.update();
-    VERBOSE_P(F("KEEP ALIVE"));
+
+    int i = webSocketsServer.connectedClients(true);
+    VERBOSE_FP(F("Send WebSocket pong and received %d ping message(s)."), i);
   }
 
   // reserve time for core processes

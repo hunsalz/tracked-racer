@@ -6,6 +6,7 @@
 #include <Esp8266Utils.h>       // https://github.com/hunsalz/esp8266utils
 
 #include "config.h"
+#include "html.h"
 
 using namespace esp8266utils;
 
@@ -47,16 +48,21 @@ void setup() {
   fs.begin();
 
   // general web server setup
-  webService.begin();
+  webService.init();
   // rewrite root context
   webService.getWebServer().rewrite("/", "/index.html");
   // handle static web resources
   webService.getWebServer().serveStatic("/", SPIFFS, "/www/", "max-age:15");
 
+  // add static ws test resource
+  webService.on("/test", HTTP_GET, [](AsyncWebServerRequest* request) {
+    request->send_P(200, TEXT_HTML, WS_TEST_HTML);
+  });
+
   // add dynamic http resources
   webService.on("/fs", HTTP_GET, [&fs](AsyncWebServerRequest* request) {
 
-    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
+    AsyncResponseStream* response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = fs.serializeInfo(*payload);
     response->print(*payload); 
@@ -65,7 +71,7 @@ void setup() {
   });
   webService.on("/files", HTTP_GET, [&fs](AsyncWebServerRequest* request) {
 
-    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
+    AsyncResponseStream* response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = fs.serializeListing(*payload);
     response->print(*payload); 
@@ -74,7 +80,7 @@ void setup() {
   });
   webService.on("/ap", HTTP_GET, [](AsyncWebServerRequest* request) {
 
-    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
+    AsyncResponseStream* response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = serializeWiFiAp(*payload);
     response->print(*payload); 
@@ -83,7 +89,7 @@ void setup() {
   });
   webService.on("/esp", HTTP_GET, [](AsyncWebServerRequest* request) {
     
-    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
+    AsyncResponseStream* response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = serializeESP(*payload);
     response->print(*payload); 
@@ -93,7 +99,7 @@ void setup() {
   });
   webService.on("/motor_a", HTTP_GET, [](AsyncWebServerRequest* request) {
     
-    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
+    AsyncResponseStream* response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = motorA.serialize(*payload);
     response->print(*payload); 
@@ -103,7 +109,7 @@ void setup() {
   });
   webService.on("/motor_b", HTTP_GET, [](AsyncWebServerRequest* request) {
     
-    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
+    AsyncResponseStream* response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = motorB.serialize(*payload);
     response->print(*payload);
@@ -114,21 +120,21 @@ void setup() {
   });
   
   // add web socket support
-  wsl.onTextMessage([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
+  wsl.onTextMessage([](AsyncWebSocket* ws, AsyncWebSocketClient* client, AwsEventType type, AwsFrameInfo* info, uint8_t* data, size_t len) {
 
     // extract request payload
     char payload[len + 1];
     snprintf(payload, len + 1, (char*)data);
     VERBOSE_FP(F("Payload of request is: %s"), payload);
 
-    // try to parse payload as JSON
+    // try to parse payload as json
     DynamicJsonDocument docRequest;
     DeserializationError err = deserializeJson(docRequest, payload);
     if (err) {
       VERBOSE_F("Reading request failed: %s", err.c_str());
       client->text(F("Received an unexpected message."));
     } else {
-      // map JSON request
+      // map json request
       JsonObject request = docRequest.as<JsonObject>();
       int speedA = request["motorA"];
       int speedB = request["motorB"];
@@ -141,7 +147,7 @@ void setup() {
         motorA.applySpeed(speedA);
         motorB.applySpeed(speedB);
       }
-      // create JSON response
+      // create json response
       DynamicJsonDocument docResponse;
       JsonObject response = docResponse.to<JsonObject>();
       response["clientId"] = client->id();
@@ -154,11 +160,13 @@ void setup() {
     }
   });
   // add web socket
-  AsyncWebSocket *webSocket = new AsyncWebSocket("/racer");
-  webSocket->onEvent([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) { 
+  AsyncWebSocket* webSocket = new AsyncWebSocket("/ws");
+  webSocket->onEvent([](AsyncWebSocket* ws, AsyncWebSocketClient* client, AwsEventType type, void *arg, uint8_t *data, size_t len) { 
     wsl.onEvent(ws, client, type, arg, data, len);
   });
   webService.getWebServer().addHandler(webSocket);
+
+  webService.begin();
 
   VERBOSE_FP(F("========================="));
   VERBOSE_FP(F("Setup finished. Have fun."));
