@@ -1,5 +1,5 @@
-#include <ESP8266WebServer.h>   // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WebServer/src/ESP8266WebServer.h
 #include <ESP8266mDNS.h>        // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/src/ESP8266mDNS.h
+#include <ESP8266WebServer.h>   // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WebServer/src/ESP8266WebServer.h
 #include <StreamString.h>       // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/StreamString.h
 
 #include <Esp8266Utils.h>       // https://github.com/hunsalz/esp8266utils
@@ -42,6 +42,9 @@ void setup() {
   } else {
      ERROR_FP(F("MDNS failed for http://%s.local"), hostname);
   }
+  // add service to MDNS
+  MDNS.addService("http", "tcp", 80);
+  MDNS.addService("ws", "tcp", 81);
 
   // file system setup to enable static web server content
   FileSystem fs; 
@@ -60,25 +63,25 @@ void setup() {
     size_t size = fs.serializeListing(*payload);
     server.send(200, APPLICATION_JSON, *payload); 
   });
-  server.on("/ap", HTTP_GET, [&fs]() {
+  server.on("/ap", HTTP_GET, []() {
   
     StreamString* payload = new StreamString();
     size_t size = serializeWiFiAp(*payload);
     server.send(200, APPLICATION_JSON, *payload); 
   });
-  server.on("/esp", HTTP_GET, [&fs]() {
+  server.on("/esp", HTTP_GET, []() {
   
     StreamString* payload = new StreamString();
     size_t size = serializeESP(*payload);
     server.send(200, APPLICATION_JSON, *payload); 
   });
-  server.on("/motor_a", HTTP_GET, [&fs]() {
+  server.on("/motor_a", HTTP_GET, []() {
   
     StreamString* payload = new StreamString();
     size_t size = motorA.serialize(*payload);
     server.send(200, APPLICATION_JSON, *payload); 
   });
-  server.on("/motor_b", HTTP_GET, [&fs]() {
+  server.on("/motor_b", HTTP_GET, []() {
   
     StreamString* payload = new StreamString();
     size_t size = motorB.serialize(*payload);
@@ -131,7 +134,7 @@ void setup() {
     webSocketsServerListener.onEvent(num, type, payload, length);
   });
 
-  // start services
+  // start web services
   webSocketsServer.begin();
   server.begin();
 

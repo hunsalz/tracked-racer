@@ -42,6 +42,9 @@ void setup() {
   } else {
      ERROR_FP(F("MDNS failed for http://%s.local"), hostname);
   }
+  // add service to MDNS
+  MDNS.addService("http", "tcp", 80);
+  MDNS.addService("ws", "tcp", 80);
 
   // file system setup to enable static web server content
   FileSystem fs; 
