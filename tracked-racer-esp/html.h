@@ -22,9 +22,6 @@ static const char WS_TEST_HTML[] PROGMEM = R"KEY(
         function sendValue() {  
             var valueA = parseInt(document.getElementById('inputA').value, 10);
             var valueB = parseInt(document.getElementById('inputB').value, 10);
-
-            console.log(valueA, valueB);
-
             connection.send('{\"motorA\":' + valueA + ',\"motorB\":' + valueB + ',\"mode\":\"absolute\"}');
         }
     </script>
