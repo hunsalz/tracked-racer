@@ -1,3 +1,5 @@
+#define USE_ESP_ASYNC
+
 #include <ESP8266mDNS.h>        // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/src/ESP8266mDNS.h
 #include <StreamString.h>       // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/StreamString.h
 
@@ -7,11 +9,11 @@
 
 using namespace esp8266utils;
 
-MotorDriver _motorA;
-MotorDriver _motorB;
+MotorDriver motorA;
+MotorDriver motorB;
 
 ESPAsyncWebService webService(80);
-ESPAsyncWebSocketListener _wsl;
+ESPAsyncWebSocketListener wsl;
 
 unsigned long nextLoopInterval = 0;
 
@@ -22,8 +24,8 @@ void setup() {
   VERBOSE_FP(F("Serial baud rate is [%lu]"), Serial.baudRate());
 
   // setup hardware components
-  _motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR, MOTOR_PWM_RANGE);
-  _motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR, MOTOR_PWM_RANGE);
+  motorA.begin(MOTOR_A_PWM, MOTOR_A_DIR, MOTOR_PWM_RANGE);
+  motorB.begin(MOTOR_B_PWM, MOTOR_B_DIR, MOTOR_PWM_RANGE);
   // setup PWM range once
   MotorDriver::applyPWMRange(MOTOR_PWM_RANGE);
 
@@ -54,7 +56,7 @@ void setup() {
   // add dynamic http resources
   webService.on("/fs", HTTP_GET, [&fs](AsyncWebServerRequest* request) {
 
-    AsyncResponseStream *response = request->beginResponseStream("application/json");  
+    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = fs.serializeInfo(*payload);
     response->print(*payload); 
@@ -63,7 +65,7 @@ void setup() {
   });
   webService.on("/files", HTTP_GET, [&fs](AsyncWebServerRequest* request) {
 
-    AsyncResponseStream *response = request->beginResponseStream("application/json");  
+    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = fs.serializeListing(*payload);
     response->print(*payload); 
@@ -72,7 +74,7 @@ void setup() {
   });
   webService.on("/ap", HTTP_GET, [](AsyncWebServerRequest* request) {
 
-    AsyncResponseStream *response = request->beginResponseStream("application/json");  
+    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = serializeWiFiAp(*payload);
     response->print(*payload); 
@@ -81,7 +83,7 @@ void setup() {
   });
   webService.on("/esp", HTTP_GET, [](AsyncWebServerRequest* request) {
     
-    AsyncResponseStream *response = request->beginResponseStream("application/json");  
+    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
     size_t size = serializeESP(*payload);
     response->print(*payload); 
@@ -91,9 +93,9 @@ void setup() {
   });
   webService.on("/motor_a", HTTP_GET, [](AsyncWebServerRequest* request) {
     
-    AsyncResponseStream *response = request->beginResponseStream("application/json");  
+    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
-    size_t size = _motorA.serialize(*payload);
+    size_t size = motorA.serialize(*payload);
     response->print(*payload); 
     request->send(response);
     VERBOSE(*payload);
@@ -101,9 +103,9 @@ void setup() {
   });
   webService.on("/motor_b", HTTP_GET, [](AsyncWebServerRequest* request) {
     
-    AsyncResponseStream *response = request->beginResponseStream("application/json");  
+    AsyncResponseStream *response = request->beginResponseStream(APPLICATION_JSON);  
     StreamString* payload = new StreamString();
-    size_t size = _motorB.serialize(*payload);
+    size_t size = motorB.serialize(*payload);
     response->print(*payload);
     VERBOSE(*payload);
     request->send(response);
@@ -112,7 +114,7 @@ void setup() {
   });
   
   // add web socket support
-  _wsl.onTextMessage([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
+  wsl.onTextMessage([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, AwsFrameInfo *info, uint8_t *data, size_t len) {
 
     // extract request payload
     char payload[len + 1];
@@ -133,18 +135,18 @@ void setup() {
       const char* mode = request["mode"];
       // decide which process mode to use
       if (strcmp("absolute", mode) == 0) {
-        _motorA.setSpeed(speedA);
-        _motorB.setSpeed(speedB);
+        motorA.setSpeed(speedA);
+        motorB.setSpeed(speedB);
       } else {
-        _motorA.applySpeed(speedA);
-        _motorB.applySpeed(speedB);
+        motorA.applySpeed(speedA);
+        motorB.applySpeed(speedB);
       }
       // create JSON response
       DynamicJsonDocument docResponse;
       JsonObject response = docResponse.to<JsonObject>();
       response["clientId"] = client->id();
-      response["motorA"] = _motorA.getSpeed();
-      response["motorB"] = _motorB.getSpeed();
+      response["motorA"] = motorA.getSpeed();
+      response["motorB"] = motorB.getSpeed();
       // send response message
       StreamString* msg = new StreamString();
       serializeJson(response, *msg);
@@ -154,7 +156,7 @@ void setup() {
   // add web socket
   AsyncWebSocket *webSocket = new AsyncWebSocket("/racer");
   webSocket->onEvent([](AsyncWebSocket *ws, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) { 
-    _wsl.onEvent(ws, client, type, arg, data, len);
+    wsl.onEvent(ws, client, type, arg, data, len);
   });
   webService.getWebServer().addHandler(webSocket);
 
