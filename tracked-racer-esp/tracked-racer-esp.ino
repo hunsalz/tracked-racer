@@ -149,7 +149,7 @@ void loop() {
   server.handleClient();
 
   if (millis() > nextLoopInterval) {  
-    nextLoopInterval = millis() + 15000;
+    nextLoopInterval = millis() + LOOP_INTERVAL;
     
     MDNS.update();
 
