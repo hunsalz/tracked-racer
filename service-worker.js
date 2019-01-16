@@ -37,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["index.html","da4371ed7e8c774093d950360c28b92b"],["src/racer-app.js","7795609381ea9cacc5dccb6407e745a9"]];
+var precacheConfig = [["index.html","da4371ed7e8c774093d950360c28b92b"],["src/racer-app.js","ad4339981352fb748e20cc6d7e1b608a"]];
 var cacheName = 'sw-precache-v3--' + (self.registration ? self.registration.scope : '');
 
 
