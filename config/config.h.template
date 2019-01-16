@@ -1,45 +1,13 @@
+#pragma once
+
 // WiFi settings
-const char *WIFI_SSID_1 = "YOUR SSID";
-const char *WIFI_PSK_1 = "YOUR PRE SHARED KEY";
-const char *WIFI_SSID_2 = "YOUR SSID";
-const char *WIFI_PSK_2 = "YOUR PRE SHARED KEY";
+const char* WIFI_AP_SSID = "MyESP";
+const char* WIFI_AP_PSK = "password";
 
-const char *WIFI_AP_SSID = "YOUR SSID";
-const char *WIFI_AP_PSK = "YOUR PRE SHARED KEY";
-
-// pin definition for motor shield
+// motor settings
 const uint8_t MOTOR_A_PWM = 5;  // D1
 const uint8_t MOTOR_A_DIR = 0;  // D3
 const uint8_t MOTOR_B_PWM = 4;  // D2
 const uint8_t MOTOR_B_DIR = 2;  // D4
 
 const uint8_t MOTOR_PWM_RANGE = 25;
-
-// html snippet
-static const char WS_TEST_HTML[] PROGMEM = R"KEY(
-<html>
-<head>
-    <script>
-        var connection = new WebSocket('ws://'+location.hostname+':81/ws/', ['arduino']);
-        connection.onopen = function() {
-            connection.send('Connect ' + new Date());
-        };
-        connection.onerror = function(error) {
-            console.log('WebSocket error ', error);
-        };
-        connection.onmessage = function(e) {
-            console.log('Server: ', e.data);
-        };
-        function sendValue() {  
-            var value = parseInt(document.getElementById('input').value).toString(16);
-            connection.send('{\"value\":' + value + '}');
-        }
-    </script>
-</head>
-<body>
-    <div>
-        Input:<input id="input" type="range" min="0" max="255" step="1" oninput="sendValue();"/>
-    </div>
-</body>
-</html>
-)KEY";
