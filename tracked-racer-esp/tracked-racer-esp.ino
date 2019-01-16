@@ -96,7 +96,6 @@ void setup() {
   // define specific ws listener handler
   webSocketsServerListener.onTextMessage([](uint8_t num, WStype_t type, uint8_t *payload, size_t length) {
 
-    VERBOSE_F("PAYLOAD %s", payload);
     // try to parse payload as json
     DynamicJsonDocument docRequest;
     DeserializationError err = deserializeJson(docRequest, payload);
