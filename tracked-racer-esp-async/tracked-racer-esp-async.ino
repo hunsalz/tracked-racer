@@ -179,7 +179,7 @@ void setup() {
 void loop() {
 
   if (millis() > nextLoopInterval) {  
-    nextLoopInterval = millis() + 5000;
+    nextLoopInterval = millis() + LOOP_INTERVAL;
     
     MDNS.update();
   }
