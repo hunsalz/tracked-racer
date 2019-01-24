@@ -3,12 +3,12 @@
 #include <ESP8266mDNS.h>        // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266mDNS/src/ESP8266mDNS.h
 #include <StreamString.h>       // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/StreamString.h
 
-#include <Esp8266Utils.h>       // https://github.com/hunsalz/esp8266utils
+#include <ESPUtils.h>           // https://github.com/hunsalz/ESPUtils
 
 #include "config.h"
 #include "html.h"
 
-using namespace esp8266utils;
+using namespace ESPUtils;
 
 MotorDriver motorA;
 MotorDriver motorB;

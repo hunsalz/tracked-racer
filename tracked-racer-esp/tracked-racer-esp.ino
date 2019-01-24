@@ -2,12 +2,12 @@
 #include <ESP8266WebServer.h>   // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WebServer/src/ESP8266WebServer.h
 #include <StreamString.h>       // https://github.com/esp8266/Arduino/blob/master/cores/esp8266/StreamString.h
 
-#include <Esp8266Utils.h>       // https://github.com/hunsalz/esp8266utils
+#include <ESPUtils.h>           // https://github.com/hunsalz/ESPUtils
 
 #include "config.h"
 #include "html.h"
 
-using namespace esp8266utils;
+using namespace ESPUtils;
 
 ESP8266WebServer server(80);
 WebSocketsServerListener webSocketsServerListener;
